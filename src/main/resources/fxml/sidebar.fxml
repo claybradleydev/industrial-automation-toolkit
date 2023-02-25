@@ -8,14 +8,14 @@
 
 <BorderPane fx:id="rootbp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #14242B #14242B;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.claybradley.industrialscanner.home.SideBarController">
    <left>
-      <VBox fx:id="sidenavvbox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #0D1824;" BorderPane.alignment="CENTER">
+      <VBox fx:id="sidenavvbox" minWidth="100.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #0D1824;" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onAction="#navhome" prefHeight="33.0" prefWidth="100.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 0px 0px 2px 0px;" text="Home" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#navpage01" prefHeight="33.0" prefWidth="100.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 0px 0px 2px 0px;" text="Page 01" textFill="WHITE">
+            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#navmodsim" prefHeight="33.0" prefWidth="100.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 0px 0px 2px 0px;" text="ModSim" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>

@@ -1,10 +1,7 @@
 package dev.claybradley.industrialscanner.modbus.slave;
 
-import org.springframework.stereotype.Service;
 
-@Service
-public class ModbusSlaveMemoryService {
-
+public class ModbusSlaveMemory {
     private final boolean [] coils = new boolean[65535];
     private final boolean [] discreteInputs = new boolean[65535];
     private final int [] holdingRegisters = new int[65535];

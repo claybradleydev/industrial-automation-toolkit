@@ -8,15 +8,13 @@ import com.digitalpetri.modbus.slave.ServiceRequestHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.util.ReferenceCountUtil;
-import org.springframework.stereotype.Component;
 
-@Component
 public class ServiceRequestHandlerIml implements ServiceRequestHandler {
 
-    private final ModbusSlaveMemoryService modbusSlaveMemoryService;
+    private final ModbusSlaveMemory modbusSlaveMemory;
 
-    public ServiceRequestHandlerIml(ModbusSlaveMemoryService modbusSlaveMemoryService){
-        this.modbusSlaveMemoryService = modbusSlaveMemoryService;
+    public ServiceRequestHandlerIml(ModbusSlaveMemory modbusSlaveMemory){
+        this.modbusSlaveMemory = modbusSlaveMemory;
     }
 
     @Override
@@ -31,7 +29,7 @@ public class ServiceRequestHandlerIml implements ServiceRequestHandler {
 
         ByteBuf registers = PooledByteBufAllocator.DEFAULT.buffer(quantity);
 
-        int [] holdingRegisters = modbusSlaveMemoryService.getHoldingRegisters();
+        int [] holdingRegisters = modbusSlaveMemory.getHoldingRegisters();
 
         for (int i = address; i < quantity; i++) {
             registers.writeShort(holdingRegisters[i]);
@@ -52,7 +50,7 @@ public class ServiceRequestHandlerIml implements ServiceRequestHandler {
         int address = request.getAddress();
         int value = request.getValue();
 
-        modbusSlaveMemoryService.setHoldingRegister(address, value);
+        modbusSlaveMemory.setHoldingRegister(address, value);
         service.sendResponse(new WriteSingleRegisterResponse(address, value));
 
         ReferenceCountUtil.release(request);

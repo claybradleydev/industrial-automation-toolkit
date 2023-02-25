@@ -1,25 +1,38 @@
 package dev.claybradley.industrialscanner.modbus.slave;
 
-import org.springframework.stereotype.Service;
 import com.digitalpetri.modbus.slave.ModbusTcpSlave;
+import org.springframework.stereotype.Service;
 import com.digitalpetri.modbus.slave.ModbusTcpSlaveConfig;
-
+import java.util.ArrayList;
 @Service
 public class ModbusSlaveService {
-    private final ModbusTcpSlaveConfig config = new ModbusTcpSlaveConfig.Builder().build();
-    private final ModbusTcpSlave slave = new ModbusTcpSlave(config);
-    private final ServiceRequestHandlerIml serviceRequestHandlerIml;
-
-    public ModbusSlaveService(ServiceRequestHandlerIml serviceRequestHandlerIml){
-        this.serviceRequestHandlerIml = serviceRequestHandlerIml;
-    }
-    public void start(String address, int port){
-        slave.setRequestHandler(serviceRequestHandlerIml);
-        slave.bind(address, port);
+    public ArrayList<ModbusSlave> getSlaves() {
+        return slaves;
     }
 
-    public void stop(){
-        slave.shutdown();
+    private final ArrayList<ModbusSlave> slaves;
+
+    public ModbusSlaveService(){
+        slaves = new ArrayList<>();
+    }
+
+    public ModbusSlave addSlave(String ipAddress, int port){
+        ModbusTcpSlaveConfig config = new ModbusTcpSlaveConfig.Builder().build();
+        ModbusTcpSlave modbusTcpSlave = new ModbusTcpSlave(config);
+        ModbusSlaveMemory modbusSlaveMemory = new ModbusSlaveMemory();
+        ServiceRequestHandlerIml serviceRequestHandlerIml = new ServiceRequestHandlerIml(modbusSlaveMemory);
+        ModbusSlave modbusSlave = new ModbusSlave(modbusTcpSlave, serviceRequestHandlerIml, ipAddress, port);
+        slaves.add(modbusSlave);
+        return modbusSlave;
+    }
+
+    public ModbusSlave getSlave(int port){
+        for(ModbusSlave slave : slaves){
+            if (slave.getPort() == port){
+                return slave;
+            }
+        }
+        return null;
     }
 
 }
