@@ -22,7 +22,7 @@ public class JavaFxApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         applicationContext.publishEvent(new StageReadyEvent(stage));
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/home-view.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/sidebar.fxml"));
         Scene scene = new Scene(root, 800, 600);
         stage.setTitle("Industrial Scanner FX");
         stage.setScene(scene);
