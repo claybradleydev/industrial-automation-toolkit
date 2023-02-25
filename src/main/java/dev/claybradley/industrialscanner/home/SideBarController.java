@@ -13,15 +13,12 @@ import java.util.logging.Logger;
 
 public class SideBarController {
 
-
     @FXML
     private VBox bodyvbox;
     @FXML
     private BorderPane rootbp;
     @FXML
     private VBox sidenavvbox;
-
-
     @FXML
     private void navhome(ActionEvent actionEvent) {
         rootbp.setCenter(bodyvbox);

@@ -16,6 +16,14 @@ public class ModbusSlaveMemory {
     public int[] getHoldingRegisters() {
         return holdingRegisters;
     }
+
+    public int[] getHoldingRegisters(int address, int quantity){
+        int[] requestedRegisters = new int[quantity];
+        for(int i = address; i < i + quantity; ++i){
+            requestedRegisters[i - address] = holdingRegisters[i];
+        }
+        return requestedRegisters;
+    }
     public int[] getInputRegisters() {
         return inputRegisters;
     }

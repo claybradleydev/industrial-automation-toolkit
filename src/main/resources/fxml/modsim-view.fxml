@@ -77,9 +77,14 @@
                   <Button mnemonicParsing="false" onAction="#clickConnectBtn" text="Connect" />
                </children>
             </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#clickUpdateLabelsBtn" text="Update" />
+               </children>
+            </VBox>
          </children>
       </HBox>
-      <FlowPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+      <FlowPane fx:id="addressValueFlowPane" hgap="40.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" vgap="10.0" VBox.vgrow="ALWAYS" />
    </children>
    <padding>
       <Insets top="20.0" />

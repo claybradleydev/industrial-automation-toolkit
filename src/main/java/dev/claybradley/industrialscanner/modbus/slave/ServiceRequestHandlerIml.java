@@ -10,6 +10,9 @@ import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.util.ReferenceCountUtil;
 
 public class ServiceRequestHandlerIml implements ServiceRequestHandler {
+    public ModbusSlaveMemory getModbusSlaveMemory() {
+        return modbusSlaveMemory;
+    }
 
     private final ModbusSlaveMemory modbusSlaveMemory;
 

@@ -37,4 +37,5 @@ public class ModbusSlave {
     public int getPort() {
         return port;
     }
+
 }

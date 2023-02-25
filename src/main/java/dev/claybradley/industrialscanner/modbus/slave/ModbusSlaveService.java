@@ -1,10 +1,9 @@
 package dev.claybradley.industrialscanner.modbus.slave;
 
 import com.digitalpetri.modbus.slave.ModbusTcpSlave;
-import org.springframework.stereotype.Service;
 import com.digitalpetri.modbus.slave.ModbusTcpSlaveConfig;
 import java.util.ArrayList;
-@Service
+
 public class ModbusSlaveService {
     public ArrayList<ModbusSlave> getSlaves() {
         return slaves;
