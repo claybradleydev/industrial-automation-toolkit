@@ -16,11 +16,8 @@ public class ModbusSlaveService {
     }
 
     public ModbusSlave addSlave(String ipAddress, int port){
-        ModbusTcpSlaveConfig config = new ModbusTcpSlaveConfig.Builder().build();
-        ModbusTcpSlave modbusTcpSlave = new ModbusTcpSlave(config);
-        ModbusSlaveMemory modbusSlaveMemory = new ModbusSlaveMemory();
-        ServiceRequestHandlerIml serviceRequestHandlerIml = new ServiceRequestHandlerIml(modbusSlaveMemory);
-        ModbusSlave modbusSlave = new ModbusSlave(modbusTcpSlave, serviceRequestHandlerIml, ipAddress, port);
+        ServiceRequestHandlerIml serviceRequestHandlerIml = new ServiceRequestHandlerIml();
+        ModbusSlave modbusSlave = new ModbusSlave(serviceRequestHandlerIml, ipAddress, port);
         slaves.add(modbusSlave);
         return modbusSlave;
     }

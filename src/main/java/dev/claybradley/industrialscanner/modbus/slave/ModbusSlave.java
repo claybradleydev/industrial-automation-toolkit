@@ -1,18 +1,21 @@
 package dev.claybradley.industrialscanner.modbus.slave;
 
 import com.digitalpetri.modbus.slave.ModbusTcpSlave;
+import com.digitalpetri.modbus.slave.ModbusTcpSlaveConfig;
+import com.digitalpetri.modbus.slave.ServiceRequestHandler;
 
 import java.util.concurrent.ExecutionException;
 
 public class ModbusSlave {
     private final ModbusTcpSlave modbusTcpSlave;
-    private final ServiceRequestHandlerIml requestHandlerIml;
+    private final ServiceRequestHandlerIml requestHandler;
     private final String ipAddress;
     private final int port;
 
-    public ModbusSlave(ModbusTcpSlave modbusTcpSlave, ServiceRequestHandlerIml requestHandlerIml, String ipAddress, int port) {
-        this.modbusTcpSlave = modbusTcpSlave;
-        this.requestHandlerIml = requestHandlerIml;
+    public ModbusSlave(ServiceRequestHandlerIml requestHandler, String ipAddress, int port) {
+        ModbusTcpSlaveConfig config = new ModbusTcpSlaveConfig.Builder().build();
+        this.modbusTcpSlave = new ModbusTcpSlave(config);
+        this.requestHandler = requestHandler;
         this.ipAddress = ipAddress;
         this.port = port;
     }
@@ -21,13 +24,17 @@ public class ModbusSlave {
         return modbusTcpSlave;
     }
 
-    public ServiceRequestHandlerIml getRequestHandlerIml() {
-        return requestHandlerIml;
+    public ServiceRequestHandlerIml getRequestHandler() {
+        return requestHandler;
     }
 
     public void start() throws ExecutionException, InterruptedException {
-        modbusTcpSlave.setRequestHandler(requestHandlerIml);
+        modbusTcpSlave.setRequestHandler(requestHandler);
         modbusTcpSlave.bind(ipAddress, port).get();
+    }
+
+    public void stop(){
+        modbusTcpSlave.shutdown();
     }
 
     public String getIpAddress() {
@@ -37,7 +44,4 @@ public class ModbusSlave {
     public int getPort() {
         return port;
     }
-
-
-
 }

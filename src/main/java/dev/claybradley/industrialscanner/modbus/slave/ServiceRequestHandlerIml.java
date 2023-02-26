@@ -10,15 +10,7 @@ import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.util.ReferenceCountUtil;
 
 public class ServiceRequestHandlerIml implements ServiceRequestHandler {
-    public ModbusSlaveMemory getModbusSlaveMemory() {
-        return modbusSlaveMemory;
-    }
-
     private final ModbusSlaveMemory modbusSlaveMemory;
-
-    public ServiceRequestHandlerIml(ModbusSlaveMemory modbusSlaveMemory){
-        this.modbusSlaveMemory = modbusSlaveMemory;
-    }
 
     @Override
     public void onReadHoldingRegisters(ServiceRequest<ReadHoldingRegistersRequest, ReadHoldingRegistersResponse> service) {
@@ -57,5 +49,13 @@ public class ServiceRequestHandlerIml implements ServiceRequestHandler {
         service.sendResponse(new WriteSingleRegisterResponse(address, value));
 
         ReferenceCountUtil.release(request);
+    }
+
+    public ModbusSlaveMemory getModbusSlaveMemory() {
+        return modbusSlaveMemory;
+    }
+
+    public ServiceRequestHandlerIml(){
+        this.modbusSlaveMemory = new ModbusSlaveMemory();
     }
 }

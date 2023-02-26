@@ -2,11 +2,17 @@ package dev.claybradley.industrialscanner.modsim;
 
 import dev.claybradley.industrialscanner.modbus.slave.ModbusSlave;
 import dev.claybradley.industrialscanner.modbus.slave.ModbusSlaveService;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.FlowPane;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +27,8 @@ import java.util.concurrent.ExecutionException;
 public class ModSimController implements Initializable {
     private final ModbusSlaveService modbusSlaveService;
     @FXML
+    private TreeView treeView;
+    @FXML
     private FlowPane devicesFlowPane;
     @FXML
     private FlowPane addressValueFlowPane;
@@ -33,9 +41,27 @@ public class ModSimController implements Initializable {
     @FXML
     private TextField unitIdTextField;
 
+    TreeItem<String> rootItem;
+    TreeItem<String> branchServers;
+    TreeItem<String> branchClients;
+
     public ModSimController(){
         this.modbusSlaveService = new ModbusSlaveService();
+        Timer myTimer = new Timer();
 
+        TimerTask myTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateAddressLabelFlowPane();
+                    }
+                });
+
+            }
+        };
+        myTimer.scheduleAtFixedRate(myTimerTask, 1000, 1000);
     }
     @FXML
     private void clickConnectBtn(ActionEvent actionEvent) throws ExecutionException, InterruptedException {
@@ -49,6 +75,13 @@ public class ModSimController implements Initializable {
         if (newModbusSlave != null){
             newModbusSlave.start();
         }
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                TreeItem<String> branchTestServer = new TreeItem<>("localhost port 502");
+                branchServers.getChildren().add(branchTestServer);
+            }
+        });
     }
 
     @Override
@@ -70,6 +103,14 @@ public class ModSimController implements Initializable {
             System.out.println("textfield changed from " + oldValue + " to " + newValue);
         });
 
+        rootItem = new TreeItem<>("Modbus TCP Devices", new ImageView(new Image("47988_folder_icon.png")));
+
+        branchServers = new TreeItem<>("Servers", new ImageView(new Image("47988_folder_icon.png")));
+        branchClients = new TreeItem<>("Clients", new ImageView(new Image("47988_folder_icon.png")));
+
+        rootItem.getChildren().addAll(branchServers, branchClients);
+
+        treeView.setRoot(rootItem);
     }
     @FXML
     private void clickUpdateLabelsBtn(ActionEvent actionEvent) {
@@ -77,13 +118,18 @@ public class ModSimController implements Initializable {
     }
 
     private void updateAddressLabelFlowPane() {
+
         addressValueFlowPane.getChildren().clear();
         devicesFlowPane.getChildren().clear();
+
         int address = Integer.valueOf(addressTextField.getText());
         int quantity = Integer.valueOf(quantityTextField.getText());
         int portNumber = Integer.valueOf(portNumberTextField.getText());
-        ModbusSlave modbusSlave = modbusSlaveService.getSlave(Integer.valueOf(portNumberTextField.getText()));
-        int [] holdingRegisters = modbusSlave.getRequestHandlerIml().getModbusSlaveMemory().getHoldingRegisters();
+        ModbusSlave modbusSlave = modbusSlaveService.getSlave(portNumber);
+        if (modbusSlave == null){
+            return;
+        }
+        int [] holdingRegisters = modbusSlave.getRequestHandler().getModbusSlaveMemory().getHoldingRegisters();
 
         for(int i = 0; i <  quantity; ++i){
             Label label = new Label("Address: " + (address + i)  + " Value: " + holdingRegisters[address + i]);
@@ -96,5 +142,14 @@ public class ModSimController implements Initializable {
             devicesFlowPane.getChildren().add(label);
             label.setStyle("-fx-text-fill: white;" + "-fx-pref-width: 150;");
         }
+    }
+
+    public void selectItem() {
+        TreeItem<String> item = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
+        if(item != null){
+            System.out.println(item.getValue());
+        }
+
+
     }
 }
