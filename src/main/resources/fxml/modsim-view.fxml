@@ -3,13 +3,14 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="596.0" prefWidth="874.0" spacing="20.0" style="-fx-background-color: #14242B #14242B;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.claybradley.industrialscanner.modsim.ModSimController">
+<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="800.0" minWidth="800.0" spacing="20.0" style="-fx-background-color: #14242B #14242B;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.claybradley.industrialscanner.modsim.ModSimController">
    <children>
       <Label text="Modbus Server Simulator" textFill="WHITE">
          <font>
@@ -19,74 +20,94 @@
             <Insets />
          </VBox.margin>
       </Label>
-      <HBox alignment="TOP_CENTER" prefHeight="69.0" prefWidth="600.0" spacing="30.0" style="-fx-background-color: transparent;">
+      <FlowPane alignment="TOP_CENTER" hgap="30.0" minWidth="0.0" rowValignment="TOP">
          <children>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+            <HBox spacing="20.0">
                <children>
-                  <Label text="Address:" textFill="WHITE">
+                  <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Address:" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="addressTextField" prefHeight="18.0" prefWidth="100.0" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Quantity:" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="quantityTextField" prefHeight="18.0" prefWidth="100.0" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Unit ID:" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="unitIdTextField" prefHeight="18.0" prefWidth="100.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <VBox alignment="CENTER">
+               <children>
+                  <Label text="Add Server" textFill="WHITE">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
                      <VBox.margin>
-                        <Insets bottom="5.0" />
+                        <Insets bottom="10.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="addressTextField" prefHeight="18.0" prefWidth="100.0" />
-               </children>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </VBox>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <Label text="Quantity:" textFill="WHITE">
-                     <VBox.margin>
-                        <Insets bottom="5.0" />
-                     </VBox.margin>
-                  </Label>
-                  <TextField fx:id="quantityTextField" prefHeight="18.0" prefWidth="100.0" />
-               </children>
-            </VBox>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <Label text="Unit ID:" textFill="WHITE">
-                     <VBox.margin>
-                        <Insets bottom="5.0" />
-                     </VBox.margin>
-                  </Label>
-                  <TextField fx:id="unitIdTextField" prefHeight="18.0" prefWidth="100.0" />
+                  <VBox alignment="CENTER">
+                     <children>
+                        <Label text="Port Number:" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="portNumberTextField" prefHeight="18.0" prefWidth="100.0" />
+                        <Button mnemonicParsing="false" onAction="#clickConnectBtn" text="Add">
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
                </children>
             </VBox>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <Label text="Port Number:" textFill="WHITE">
-                     <VBox.margin>
-                        <Insets bottom="5.0" />
-                     </VBox.margin>
-                  </Label>
-                  <TextField fx:id="portNumberTextField" prefHeight="18.0" prefWidth="100.0" />
-               </children>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </VBox>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <Label fx:id="connectedLabel" text="Not Connected" textFill="WHITE">
-                     <VBox.margin>
-                        <Insets bottom="5.0" />
-                     </VBox.margin>
-                  </Label>
-                  <Button mnemonicParsing="false" onAction="#clickConnectBtn" text="Connect" />
-               </children>
-            </VBox>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+            <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
                <children>
                   <Button mnemonicParsing="false" onAction="#clickUpdateLabelsBtn" text="Update" />
                </children>
             </VBox>
          </children>
-      </HBox>
-      <FlowPane fx:id="addressValueFlowPane" hgap="40.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" vgap="10.0" VBox.vgrow="ALWAYS" />
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </FlowPane>
+      <FlowPane fx:id="devicesFlowPane" alignment="TOP_CENTER" hgap="30.0" rowValignment="TOP">
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin></FlowPane>
+      <ScrollPane minHeight="0.0" prefHeight="390.0" prefWidth="874.0" style="-fx-fit-to-width: true; -fx-fit-to-height: true; -fx-background-color: black;" VBox.vgrow="ALWAYS">
+         <content>
+            <FlowPane fx:id="addressValueFlowPane" hgap="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: black;" vgap="10.0">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </FlowPane>
+         </content>
+      </ScrollPane>
    </children>
    <padding>
-      <Insets top="20.0" />
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
 </VBox>

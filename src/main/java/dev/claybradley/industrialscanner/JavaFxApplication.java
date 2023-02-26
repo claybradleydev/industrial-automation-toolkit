@@ -23,7 +23,10 @@ public class JavaFxApplication extends Application {
     public void start(Stage stage) throws Exception {
         applicationContext.publishEvent(new StageReadyEvent(stage));
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/sidebar.fxml"));
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 1600, 900);
+        //scene.getStylesheets().add();
+        String css = this.getClass().getResource("/css/application.css").toExternalForm();
+        scene.getStylesheets().add(css);
         stage.setTitle("Industrial Scanner FX");
         stage.setScene(scene);
         stage.show();

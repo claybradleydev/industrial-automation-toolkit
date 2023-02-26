@@ -12,6 +12,7 @@ import javafx.scene.layout.FlowPane;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -19,6 +20,8 @@ import java.util.concurrent.ExecutionException;
 
 public class ModSimController implements Initializable {
     private final ModbusSlaveService modbusSlaveService;
+    @FXML
+    private FlowPane devicesFlowPane;
     @FXML
     private FlowPane addressValueFlowPane;
     @FXML
@@ -29,18 +32,10 @@ public class ModSimController implements Initializable {
     private TextField portNumberTextField;
     @FXML
     private TextField unitIdTextField;
-    @FXML
-    private Label connectedLabel;
 
     public ModSimController(){
         this.modbusSlaveService = new ModbusSlaveService();
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                updateAddressLabelFlowPane();
-            }
-        };
+
     }
     @FXML
     private void clickConnectBtn(ActionEvent actionEvent) throws ExecutionException, InterruptedException {
@@ -62,7 +57,6 @@ public class ModSimController implements Initializable {
         unitIdTextField.setText("0");
         addressTextField.setText("0");
         quantityTextField.setText("100");
-        connectedLabel.setText("Not Connected");
         unitIdTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("textfield changed from " + oldValue + " to " + newValue);
         });
@@ -75,6 +69,7 @@ public class ModSimController implements Initializable {
         quantityTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("textfield changed from " + oldValue + " to " + newValue);
         });
+
     }
     @FXML
     private void clickUpdateLabelsBtn(ActionEvent actionEvent) {
@@ -83,6 +78,7 @@ public class ModSimController implements Initializable {
 
     private void updateAddressLabelFlowPane() {
         addressValueFlowPane.getChildren().clear();
+        devicesFlowPane.getChildren().clear();
         int address = Integer.valueOf(addressTextField.getText());
         int quantity = Integer.valueOf(quantityTextField.getText());
         int portNumber = Integer.valueOf(portNumberTextField.getText());
@@ -90,8 +86,15 @@ public class ModSimController implements Initializable {
         int [] holdingRegisters = modbusSlave.getRequestHandlerIml().getModbusSlaveMemory().getHoldingRegisters();
 
         for(int i = 0; i <  quantity; ++i){
-            Label label = new Label("Address: " + (address + i)  + " Value: " + holdingRegisters[i]);
+            Label label = new Label("Address: " + (address + i)  + " Value: " + holdingRegisters[address + i]);
             addressValueFlowPane.getChildren().add(label);
+            label.setStyle("-fx-text-fill: white;" + "-fx-pref-width: 150;");
+        }
+        ArrayList<ModbusSlave> slaves = modbusSlaveService.getSlaves();
+        for(ModbusSlave slave: slaves){
+            Label label = new Label(String.valueOf(slave.getPort()));
+            devicesFlowPane.getChildren().add(label);
+            label.setStyle("-fx-text-fill: white;" + "-fx-pref-width: 150;");
         }
     }
 }
