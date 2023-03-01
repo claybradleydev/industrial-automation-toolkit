@@ -1,4 +1,4 @@
-package dev.claybradley.industrialscanner;
+package dev.claybradley.industrialautomationtoolkit;
 
 import javafx.stage.Stage;
 import org.springframework.context.ApplicationListener;

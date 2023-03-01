@@ -1,4 +1,4 @@
-package dev.claybradley.industrialscanner;
+package dev.claybradley.industrialautomationtoolkit;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

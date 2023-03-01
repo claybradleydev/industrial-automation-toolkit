@@ -1,17 +1,17 @@
-package dev.claybradley.industrialscanner.modbus.slave;
+package dev.claybradley.industrialautomationtoolkit.modbus;
 
-import com.digitalpetri.modbus.slave.ModbusTcpSlave;
-import com.digitalpetri.modbus.slave.ModbusTcpSlaveConfig;
+import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
+import dev.claybradley.industrialautomationtoolkit.modbus.slave.ServiceRequestHandlerIml;
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
-
-public class ModbusSlaveService {
-    public ArrayList<ModbusSlave> getSlaves() {
-        return slaves;
-    }
+@Component
+public class ModbusMainModel {
 
     private final ArrayList<ModbusSlave> slaves;
+    private ModbusSlave selectedSlave;
 
-    public ModbusSlaveService(){
+    public ModbusMainModel(){
         slaves = new ArrayList<>();
     }
 
@@ -19,6 +19,7 @@ public class ModbusSlaveService {
         ServiceRequestHandlerIml serviceRequestHandlerIml = new ServiceRequestHandlerIml();
         ModbusSlave modbusSlave = new ModbusSlave(serviceRequestHandlerIml, ipAddress, port);
         slaves.add(modbusSlave);
+        selectedSlave = modbusSlave;
         return modbusSlave;
     }
 
@@ -29,6 +30,10 @@ public class ModbusSlaveService {
             }
         }
         return null;
+    }
+
+    public ArrayList<ModbusSlave> getSlaves() {
+        return slaves;
     }
 
 }

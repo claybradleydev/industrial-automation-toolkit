@@ -1,4 +1,4 @@
-package dev.claybradley.industrialscanner.modbus.slave;
+package dev.claybradley.industrialautomationtoolkit.modbus.slave;
 
 
 public class ModbusSlaveMemory {

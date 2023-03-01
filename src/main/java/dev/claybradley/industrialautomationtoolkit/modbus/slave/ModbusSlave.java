@@ -1,8 +1,7 @@
-package dev.claybradley.industrialscanner.modbus.slave;
+package dev.claybradley.industrialautomationtoolkit.modbus.slave;
 
 import com.digitalpetri.modbus.slave.ModbusTcpSlave;
 import com.digitalpetri.modbus.slave.ModbusTcpSlaveConfig;
-import com.digitalpetri.modbus.slave.ServiceRequestHandler;
 
 import java.util.concurrent.ExecutionException;
 

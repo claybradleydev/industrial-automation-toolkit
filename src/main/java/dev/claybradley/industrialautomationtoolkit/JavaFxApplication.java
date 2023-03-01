@@ -1,4 +1,4 @@
-package dev.claybradley.industrialscanner;
+package dev.claybradley.industrialautomationtoolkit;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -22,9 +22,11 @@ public class JavaFxApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         applicationContext.publishEvent(new StageReadyEvent(stage));
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/sidebar.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("/fxml/Main.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Main.fxml"));
+        fxmlLoader.setControllerFactory(applicationContext::getBean);
+        Parent root = fxmlLoader.load();
         Scene scene = new Scene(root, 1600, 900);
-        //scene.getStylesheets().add();
         String css = this.getClass().getResource("/css/application.css").toExternalForm();
         scene.getStylesheets().add(css);
         stage.setTitle("Industrial Scanner FX");
@@ -46,4 +48,5 @@ public class JavaFxApplication extends Application {
             return((Stage) getSource());
         }
     }
+
 }

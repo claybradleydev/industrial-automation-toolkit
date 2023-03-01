@@ -1,4 +1,4 @@
-package dev.claybradley.industrialscanner;
+package dev.claybradley.industrialautomationtoolkit;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

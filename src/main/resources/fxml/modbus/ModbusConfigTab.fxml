@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="ModbusConfigTab" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.configtab.ConfigTabController">
+   <children>
+      <Label layoutX="216.0" layoutY="47.0" prefHeight="17.0" prefWidth="162.0" text="Configure" />
+   </children>
+</AnchorPane>

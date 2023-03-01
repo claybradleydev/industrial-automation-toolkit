@@ -1,4 +1,4 @@
-package dev.claybradley.industrialscanner.modbus.slave;
+package dev.claybradley.industrialautomationtoolkit.modbus.slave;
 
 import com.digitalpetri.modbus.requests.ReadHoldingRegistersRequest;
 import com.digitalpetri.modbus.requests.WriteSingleRegisterRequest;
