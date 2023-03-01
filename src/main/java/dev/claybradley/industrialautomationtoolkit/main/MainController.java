@@ -33,7 +33,7 @@ public class MainController {
         rootbp.setCenter(bodyvbox);
     }
     @FXML
-    private void navmodsim(ActionEvent actionEvent) {
+    private void navmodbus(ActionEvent actionEvent) {
         loadPage("/modbus/ModbusMain");
     }
     @FXML

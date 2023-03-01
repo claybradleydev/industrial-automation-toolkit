@@ -23,6 +23,13 @@ public class ModbusMainModel {
         return modbusSlave;
     }
 
+    public void removeSlave(int port){
+        ModbusSlave modbusSlave = getSlave(port);
+        modbusSlave.stop();
+        slaves.remove(modbusSlave);
+        selectedSlave = null;
+    }
+
     public ModbusSlave getSlave(int port){
         for(ModbusSlave slave : slaves){
             if (slave.getPort() == port){
