@@ -1,11 +1,15 @@
 package dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.pollingtab;
 
+import dev.claybradley.industrialautomationtoolkit.modbus.ModbusMainModel;
+import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +19,12 @@ import java.util.ResourceBundle;
 @Component
 @Scope("prototype")
 public class ModbusPollingTabController implements Initializable {
+
     public VBox PollingTab;
 
-    private ModbusPollingTabModel modbusPollingTabModel = new ModbusPollingTabModel();
+    @Autowired
+    ModbusMainModel modbusMainModel;
+    private ModbusPollingTabModel modbusPollingTabModel;
     @FXML
     private TextField addressTextField;
     @FXML
@@ -31,8 +38,15 @@ public class ModbusPollingTabController implements Initializable {
         updateAddressLabelFlowPane();
     }
 
+    public ModbusPollingTabController(){
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        int port = modbusMainModel.getSelectedSlave().getPort();
+        this.modbusPollingTabModel = modbusMainModel.getModbusSlaveTabPaneModel(port).getModbusPollingTabModel();
+
         unitIdTextField.setText(String.valueOf(modbusPollingTabModel.getUnitId()));
         addressTextField.setText(String.valueOf(modbusPollingTabModel.getAddress()));
         quantityTextField.setText(String.valueOf(modbusPollingTabModel.getQuantity()));
@@ -51,13 +65,12 @@ public class ModbusPollingTabController implements Initializable {
             System.out.println("Unit ID Text Field changed from " + oldValue + " to " + newValue);
             modbusPollingTabModel.setQuantity(Integer.valueOf(newValue));
         });
-
     }
 
     private void updateAddressLabelFlowPane() {
-/*
+
         addressValueFlowPane.getChildren().clear();
-        ModbusSlave modbusSlave = modbusModel.getSlave(5020);
+        ModbusSlave modbusSlave = modbusMainModel.getSelectedSlave();
         if (modbusSlave == null){
             return;
         }
@@ -70,7 +83,6 @@ public class ModbusPollingTabController implements Initializable {
             label.setStyle("-fx-text-fill: white;" + "-fx-pref-width: 150;");
         }
 
- */
     }
 
 
