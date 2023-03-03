@@ -1,17 +1,19 @@
 package dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane;
 
+import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.pollingtab.ModbusPollingTabModel;
-
-import java.util.ArrayList;
 
 public class ModbusSlaveTabPaneModel {
     private final ModbusPollingTabModel modbusPollingTabModel;
     private int selectedTab;
     private int port;
 
-    public ModbusSlaveTabPaneModel(int port) {
+    private final ModbusSlave modbusSlave;
+
+    public ModbusSlaveTabPaneModel(int port, ModbusSlave modbusSlave) {
         this.port = port;
-        modbusPollingTabModel = new ModbusPollingTabModel();
+        this.modbusSlave = modbusSlave;
+        modbusPollingTabModel = new ModbusPollingTabModel(modbusSlave);
         selectedTab = 0;
     }
 

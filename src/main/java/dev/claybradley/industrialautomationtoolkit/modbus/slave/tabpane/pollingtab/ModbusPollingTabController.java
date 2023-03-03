@@ -2,6 +2,7 @@ package dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.polling
 
 import dev.claybradley.industrialautomationtoolkit.modbus.ModbusMainModel;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,13 +15,20 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Component
 @Scope("prototype")
 public class ModbusPollingTabController implements Initializable {
 
     public VBox PollingTab;
+    public TextField pollingRateTextField;
+    public Label pollingStatusLabel;
+    public VBox ModbusPollingTab;
+    private Timer timer;
 
     @Autowired
     ModbusMainModel modbusMainModel;
@@ -43,13 +51,18 @@ public class ModbusPollingTabController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        this.timer = new Timer();
 
         int port = modbusMainModel.getSelectedSlave().getPort();
         this.modbusPollingTabModel = modbusMainModel.getModbusSlaveTabPaneModel(port).getModbusPollingTabModel();
-
+        if(modbusPollingTabModel.isPolling()){
+            startPolling();
+        }
         unitIdTextField.setText(String.valueOf(modbusPollingTabModel.getUnitId()));
         addressTextField.setText(String.valueOf(modbusPollingTabModel.getAddress()));
         quantityTextField.setText(String.valueOf(modbusPollingTabModel.getQuantity()));
+        pollingRateTextField.setText(String.valueOf(modbusPollingTabModel.getPollingRate()));
+        pollingStatusLabel.setText(String.valueOf(modbusPollingTabModel.isPolling()));
 
         unitIdTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("Unit ID Text Field changed from " + oldValue + " to " + newValue);
@@ -57,32 +70,73 @@ public class ModbusPollingTabController implements Initializable {
         });
 
         addressTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Unit ID Text Field changed from " + oldValue + " to " + newValue);
+            System.out.println("Address Text Field changed from " + oldValue + " to " + newValue);
             modbusPollingTabModel.setAddress(Integer.valueOf(newValue));
         });
 
         quantityTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Unit ID Text Field changed from " + oldValue + " to " + newValue);
+            System.out.println("Quantity Text Field changed from " + oldValue + " to " + newValue);
             modbusPollingTabModel.setQuantity(Integer.valueOf(newValue));
+        });
+
+        pollingRateTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("Polling Rate Text Field changed from " + oldValue + " to " + newValue);
+            modbusPollingTabModel.setPollingRate(Integer.valueOf(newValue));
+            if(modbusPollingTabModel.isPolling()){
+                timer.cancel();
+                timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        updateAddressLabelFlowPane();
+                    }
+                }, 0, modbusPollingTabModel.getPollingRate());
+            }
         });
     }
 
     private void updateAddressLabelFlowPane() {
-
-        addressValueFlowPane.getChildren().clear();
-        ModbusSlave modbusSlave = modbusMainModel.getSelectedSlave();
-        if (modbusSlave == null){
-            return;
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            addressValueFlowPane.getChildren().clear();
+            ArrayList<String> values = modbusPollingTabModel.pollSlave();
+            for (int i = 0; i < values.size(); ++i) {
+                Label label = new Label(values.get(i));
+                label.setStyle("-fx-text-fill: white;" + "-fx-pref-width: 150;");
+                addressValueFlowPane.getChildren().add(label);
+            }
         }
-        int [] holdingRegisters = modbusSlave.getRequestHandler().getModbusSlaveMemory().getHoldingRegisters();
-        int quantity = Integer.valueOf(quantityTextField.getText());
-        int address = Integer.valueOf(addressTextField.getText());
-        for(int i = 0; i <  quantity; ++i){
-            Label label = new Label("Address: " + (address + i)  + " Value: " + holdingRegisters[address + i]);
-            addressValueFlowPane.getChildren().add(label);
-            label.setStyle("-fx-text-fill: white;" + "-fx-pref-width: 150;");
-        }
+    };
+    Platform.runLater(runnable);
+    }
 
+    private void updatePollingStatusLabel(){
+        pollingStatusLabel.setText(String.valueOf(modbusPollingTabModel.isPolling()));
+    }
+
+    public void clickStartPolling(ActionEvent actionEvent) {
+        startPolling();
+    }
+
+    public void startPolling(){
+        modbusPollingTabModel.setPolling(true);
+        updatePollingStatusLabel();
+        timer = new Timer();
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                updateAddressLabelFlowPane();
+            }
+        }, 0, modbusPollingTabModel.getPollingRate());
+    }
+
+    public void clickStopPolling(ActionEvent actionEvent) {
+        modbusPollingTabModel.setPolling(false);
+        updatePollingStatusLabel();
+        timer.cancel();
+        timer = new Timer();
     }
 
 

@@ -82,9 +82,9 @@
             <Insets top="10.0" />
          </VBox.margin>
       </FlowPane>
-      <HBox fx:id="BodyHBox" prefHeight="436.0" prefWidth="566.0" VBox.vgrow="ALWAYS">
+      <HBox fx:id="ModbusMainBodyHBox" minWidth="600.0" prefHeight="436.0" prefWidth="566.0" VBox.vgrow="ALWAYS">
          <children>
-            <TreeView fx:id="treeView" maxWidth="200.0"  onMouseClicked="#clickSelectTreeItem" prefWidth="200.0" HBox.hgrow="NEVER" />
+            <TreeView fx:id="treeView" maxWidth="200.0" minWidth="200.0" onMouseClicked="#clickSelectTreeItem" prefWidth="200.0" HBox.hgrow="NEVER" />
          </children>
       </HBox>
    </children>

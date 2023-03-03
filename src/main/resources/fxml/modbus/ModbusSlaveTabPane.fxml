@@ -3,26 +3,27 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
-<TabPane fx:id="ModbusSlaveTabPane" onMouseClicked="#switchTabClick" prefHeight="450.0" prefWidth="731.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.ModbusSlaveTabPaneController">
-   <tabs>
-      <Tab text="Config">
-         <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <fx:include source="ModbusConfigTab.fxml" />
-               </children>
-            </AnchorPane>
-         </content>
-      </Tab>
-      <Tab text="Polling">
-         <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <fx:include source="ModbusPollingTab.fxml" />
-               </children>
-            </AnchorPane>
-         </content>
-      </Tab>
-   </tabs>
-</TabPane>
+<HBox fx:id="ModbusSlaveTabPane" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="200.0" prefHeight="471.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.ModbusSlaveTabPaneController">
+   <children>
+      <TabPane fx:id="ModbusSlaveTabPanePane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="200.0" onMouseClicked="#switchTabClick" prefHeight="450.0" prefWidth="731.0" tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
+         <tabs>
+            <Tab text="Config">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="440.0" prefWidth="404.0">
+                     <children>
+                        <fx:include fx:id="ModbusConfigTab" source="ModbusConfigTab.fxml" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Polling">
+               <content>
+                  <fx:include fx:id="ModbusPollingTab" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="200.0" source="ModbusPollingTab.fxml" />
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </children>
+</HBox>

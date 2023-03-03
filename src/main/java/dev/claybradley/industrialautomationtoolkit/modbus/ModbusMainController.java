@@ -3,7 +3,6 @@ package dev.claybradley.industrialautomationtoolkit.modbus;
 import dev.claybradley.industrialautomationtoolkit.main.MainController;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.ModbusSlaveTabPaneModel;
-import dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.pollingtab.ModbusPollingTabModel;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +14,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
@@ -32,7 +33,9 @@ import java.util.logging.Logger;
 @Scope("prototype")
 public class ModbusMainController implements Initializable {
     @FXML
-    private HBox BodyHBox;
+    private HBox ModbusMainBodyHBox;
+    @FXML
+    private VBox ModbusMain;
     @Autowired
     ApplicationContext applicationContext;
     @FXML
@@ -82,7 +85,8 @@ public class ModbusMainController implements Initializable {
                 }
             });
         }
-        ModbusSlaveTabPaneModel modbusSlaveTabPaneModel = new ModbusSlaveTabPaneModel(portNumber);
+
+        ModbusSlaveTabPaneModel modbusSlaveTabPaneModel = new ModbusSlaveTabPaneModel(portNumber, newModbusSlave);
         modbusMainModel.addModbusSlaveTabPaneModel(modbusSlaveTabPaneModel);
     }
 
@@ -124,8 +128,8 @@ public class ModbusMainController implements Initializable {
     }
 
     private void showModbusSlaveTabPane() {
-            if (BodyHBox.getChildren().size() > 1) {
-                BodyHBox.getChildren().remove(1);
+            if (ModbusMainBodyHBox.getChildren().size() > 1) {
+                ModbusMainBodyHBox.getChildren().remove(1);
             }
             Parent root = null;
             try{
@@ -135,12 +139,15 @@ public class ModbusMainController implements Initializable {
             } catch (IOException ex) {
                 Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            BodyHBox.getChildren().add(root);
+            if (root != null) {
+                ModbusMainBodyHBox.getChildren().add(root);
+                HBox.setHgrow(root, Priority.ALWAYS);
+            }
     }
 
     private void hideModbusSlaveTabPane(){
-        if (BodyHBox.getChildren().size() > 1) {
-            BodyHBox.getChildren().remove(1);
+        if (ModbusMainBodyHBox.getChildren().size() > 1) {
+            ModbusMainBodyHBox.getChildren().remove(1);
         }
     }
 
