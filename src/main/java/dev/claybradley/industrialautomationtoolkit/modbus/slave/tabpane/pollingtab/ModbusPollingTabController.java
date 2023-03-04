@@ -65,22 +65,18 @@ public class ModbusPollingTabController implements Initializable {
         pollingStatusLabel.setText(String.valueOf(modbusPollingTabModel.isPolling()));
 
         unitIdTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Unit ID Text Field changed from " + oldValue + " to " + newValue);
             modbusPollingTabModel.setUnitId(Integer.valueOf(newValue));
         });
 
         addressTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Address Text Field changed from " + oldValue + " to " + newValue);
             modbusPollingTabModel.setAddress(Integer.valueOf(newValue));
         });
 
         quantityTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Quantity Text Field changed from " + oldValue + " to " + newValue);
             modbusPollingTabModel.setQuantity(Integer.valueOf(newValue));
         });
 
         pollingRateTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Polling Rate Text Field changed from " + oldValue + " to " + newValue);
             modbusPollingTabModel.setPollingRate(Integer.valueOf(newValue));
             if(modbusPollingTabModel.isPolling()){
                 timer.cancel();

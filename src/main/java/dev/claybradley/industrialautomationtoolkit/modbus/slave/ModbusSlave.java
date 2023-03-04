@@ -33,10 +33,7 @@ public class ModbusSlave {
     }
 
     public void stop(){
-
-                modbusTcpSlave.shutdown();
-
-
+        modbusTcpSlave.shutdown();
     }
 
     public String getIpAddress() {

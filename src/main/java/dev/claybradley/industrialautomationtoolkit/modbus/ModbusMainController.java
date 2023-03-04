@@ -1,21 +1,27 @@
 package dev.claybradley.industrialautomationtoolkit.modbus;
 
+import dev.claybradley.industrialautomationtoolkit.JavaFxApplication;
 import dev.claybradley.industrialautomationtoolkit.main.MainController;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.ModbusSlaveTabPaneModel;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
@@ -32,14 +38,17 @@ import java.util.logging.Logger;
 @Component
 @Scope("prototype")
 public class ModbusMainController implements Initializable {
+    public Button addDeviceBtn;
+    @FXML
+    private Label addDeviceLabel;
+    @FXML
+    private Label removeDeviceLabel;
     @FXML
     private HBox ModbusMainBodyHBox;
     @FXML
     private VBox ModbusMain;
     @Autowired
     ApplicationContext applicationContext;
-    @FXML
-    private TextField addSlavePortNumTextField;
     @FXML
     private ChoiceBox removeSlavePortNumChoiceBox;
     @Autowired
@@ -51,43 +60,53 @@ public class ModbusMainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        addSlavePortNumTextField.setText("5020");
-        addSlavePortNumTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("textfield changed from " + oldValue + " to " + newValue);
-        });
+    buildTreeView();
+    }
 
-        TreeItem<String> rootItem = new TreeItem<>("Modbus TCP Devices", new ImageView(new Image("images/47988_folder_icon.png")));
+    public void buildTreeView(){
+        TreeItem<String> rootItem = new TreeItem<>(" Modbus TCP Devices", new ImageView(new Image("images/47988_folder_icon.png")));
 
-        branchServers = new TreeItem<>("Servers", new ImageView(new Image("images/47988_folder_icon.png")));
-        branchClients = new TreeItem<>("Clients", new ImageView(new Image("images/47988_folder_icon.png")));
+        branchServers = new TreeItem<>(" Servers", new ImageView(new Image("images/47988_folder_icon.png")));
+        branchClients = new TreeItem<>(" Clients", new ImageView(new Image("images/47988_folder_icon.png")));
 
         rootItem.getChildren().addAll(branchServers, branchClients);
 
         treeView.setRoot(rootItem);
         updateBranchServers();
-    }
 
-    @FXML
-    private void clickAddSlave(ActionEvent actionEvent) throws ExecutionException, InterruptedException {
-        System.out.println("Clicked Submit");
-        int portNumber = Integer.valueOf(addSlavePortNumTextField.getText());
-        ModbusSlave existingModbusSlave = modbusMainModel.getSlave(portNumber);
-        if(existingModbusSlave != null){
-            return;
-        }
-        ModbusSlave newModbusSlave = modbusMainModel.addSlave("192.168.1.16", portNumber);
-        if (newModbusSlave != null){
-            newModbusSlave.start();
-            Platform.runLater(new Runnable() {
+        ContextMenu addDeviceContextMenu = new ContextMenu();
+        MenuItem addClient = new MenuItem("Add Client");
+        MenuItem addServer = new MenuItem("Add Server");
+        addDeviceContextMenu.getItems().addAll(addClient, addServer);
+
+        addDeviceLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                addDeviceContextMenu.show(addDeviceLabel, mouseEvent.getScreenX(),mouseEvent.getScreenY());
+            }
+        });
+
+        addServer.setOnAction(e -> {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/modbus/popups/AddServerPopup.fxml"));
+            fxmlLoader.setControllerFactory(applicationContext::getBean);
+            Parent root = null;
+            try {
+                root = fxmlLoader.load();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            Scene scene = new Scene(root, 500, 500);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setOnHiding(new EventHandler<WindowEvent>() {
                 @Override
-                public void run() {
+                public void handle(WindowEvent windowEvent) {
                     updateBranchServers();
                 }
             });
-        }
+            stage.show();
 
-        ModbusSlaveTabPaneModel modbusSlaveTabPaneModel = new ModbusSlaveTabPaneModel(portNumber, newModbusSlave);
-        modbusMainModel.addModbusSlaveTabPaneModel(modbusSlaveTabPaneModel);
+        });
     }
 
     @FXML
@@ -109,10 +128,9 @@ public class ModbusMainController implements Initializable {
     private void clickSelectTreeItem(MouseEvent contextMenuEvent) {
         TreeItem<String> item = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
         if(item != null){
-            System.out.println(item.getValue());
             TreeItem parent = item.getParent();
             if(parent != null){
-                if (parent.getValue().equals("Servers")){
+                if (parent.getValue().equals(" Servers")){
                     String ipAndPort = item.getValue();
                     String portString = ipAndPort.substring(ipAndPort.lastIndexOf(":") + 1);
                     int port = Integer.valueOf(portString);
@@ -121,7 +139,6 @@ public class ModbusMainController implements Initializable {
                         modbusMainModel.setSelectedSlave(newSelectedSlave);
                         showModbusSlaveTabPane();
                     }
-                    System.out.println("New Selected Slave: " + String.valueOf(modbusMainModel.getSelectedSlave().getPort()));
                 }
             }
         }

@@ -8,4 +8,5 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 public class ConfigTabController {
     public AnchorPane ConfigTab;
+    public AnchorPane ModbusConfigTab;
 }

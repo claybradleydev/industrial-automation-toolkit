@@ -45,7 +45,7 @@ public class MainController {
         loadPage("page03-view");
     }
 
-    private void loadPage(String page){
+    public void loadPage(String page){
         Parent root = null;
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/" + page + ".fxml"));

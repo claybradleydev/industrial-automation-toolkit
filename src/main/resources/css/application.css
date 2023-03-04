@@ -1,8 +1,30 @@
-.root{
-    -fx-color: #FFFFFF;
-}
+
 
 .label{
 
     -fx-fill: white;
+}
+
+.tab-header-background {
+    -fx-background-color: #161618;
+}
+
+.tab-label{
+    -fx-text-fill: white;
+}
+
+.tree-view .tree-cell {
+    -fx-background-color: #161618 ;
+    -fx-text-fill: #ffffff ;
+}
+.tree-view{
+    -fx-background-color: #161618;
+    -fx-border-width: 0;
+    -fx-background-insets: 1;
+    -fx-padding: 10px 10px 10px 0 ;
+}
+
+.tab{
+    -fx-background-color: transparent;
+    -fx-text-fill: #ffffff ;
 }

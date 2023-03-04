@@ -6,12 +6,11 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="ModbusPollingTab" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="400.0" style="-fx-background-color: #14242B #14242B #14242B #14242B;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.pollingtab.ModbusPollingTabController">
+<VBox fx:id="ModbusPollingTab" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="400.0" style="-fx-background-color: #121212 #121212;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.pollingtab.ModbusPollingTabController">
    <children>
-      <HBox alignment="CENTER" minWidth="200.0" spacing="20.0">
+      <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
          <children>
             <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
                <children>
@@ -22,6 +21,9 @@
                   </Label>
                   <TextField fx:id="addressTextField" prefHeight="18.0" prefWidth="100.0" />
                </children>
+               <FlowPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </FlowPane.margin>
             </VBox>
             <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
                <children>
@@ -32,6 +34,9 @@
                   </Label>
                   <TextField fx:id="quantityTextField" prefHeight="18.0" prefWidth="100.0" />
                </children>
+               <FlowPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </FlowPane.margin>
             </VBox>
             <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
                <children>
@@ -42,11 +47,17 @@
                   </Label>
                   <TextField fx:id="unitIdTextField" prefHeight="18.0" prefWidth="100.0" />
                </children>
+               <FlowPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </FlowPane.margin>
             </VBox>
             <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
                <children>
                   <Button mnemonicParsing="false" onAction="#clickUpdateLabelsBtn" text="Update" />
                </children>
+               <FlowPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </FlowPane.margin>
             </VBox>
             <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
                <children>
@@ -57,6 +68,9 @@
                   </Label>
                   <TextField fx:id="pollingRateTextField" prefHeight="18.0" prefWidth="100.0" />
                </children>
+               <FlowPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </FlowPane.margin>
             </VBox>
             <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" spacing="5.0">
                <children>
@@ -68,9 +82,12 @@
                   <Button mnemonicParsing="false" onAction="#clickStartPolling" text="Start Polling" />
                   <Button mnemonicParsing="false" onAction="#clickStopPolling" text="Stop Polling" />
                </children>
+               <FlowPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </FlowPane.margin>
             </VBox>
          </children>
-      </HBox>
+      </FlowPane>
       <ScrollPane minHeight="0.0" minWidth="400.0" prefHeight="436.0" prefWidth="1018.0" style="-fx-fit-to-width: true; -fx-fit-to-height: true; -fx-background-color: black;" VBox.vgrow="ALWAYS">
          <content>
             <FlowPane fx:id="addressValueFlowPane" hgap="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="200.0" style="-fx-background-color: black;" vgap="10.0">
