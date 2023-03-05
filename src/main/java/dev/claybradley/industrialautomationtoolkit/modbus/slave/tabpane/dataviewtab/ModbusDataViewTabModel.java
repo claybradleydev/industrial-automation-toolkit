@@ -1,5 +1,6 @@
 package dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.dataviewtab;
 
+import com.digitalpetri.modbus.FunctionCode;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
 
 import java.util.ArrayList;
@@ -8,20 +9,15 @@ public class ModbusDataViewTabModel {
     private int address;
     private int quantity;
     private int unitId;
-
-    private boolean polling;
-
-    private int pollingRate;
-
+    private int functionCode;
     private final ModbusSlave modbusSlave;
 
     public ModbusDataViewTabModel(ModbusSlave modbusSlave) {
         this.modbusSlave = modbusSlave;
         this.address = 0;
-        this.quantity = 10;
+        this.quantity = 100;
         this.unitId = 0;
-        this.pollingRate = 1000;
-        this.polling = false;
+        this.functionCode = 3;
     }
     public ArrayList<String> pollSlave(){
         ArrayList<String> values = new ArrayList<>();
@@ -63,19 +59,12 @@ public class ModbusDataViewTabModel {
         this.unitId = unitId;
     }
 
-    public boolean isPolling() {
-        return polling;
+
+    public int getFunctionCode() {
+        return functionCode;
     }
 
-    public void setPolling(boolean polling) {
-        this.polling = polling;
-    }
-
-    public int getPollingRate() {
-        return pollingRate;
-    }
-
-    public void setPollingRate(int pollingRate) {
-        this.pollingRate = pollingRate;
+    public void setFunctionCode(int functionCode) {
+        this.functionCode = functionCode;
     }
 }

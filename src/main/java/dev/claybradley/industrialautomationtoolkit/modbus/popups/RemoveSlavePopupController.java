@@ -30,17 +30,19 @@ public class RemoveSlavePopupController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         updateRemoveSlavePortNumChoiceBox();
     }
+
     @FXML
     public void clickRemoveSlave(ActionEvent actionEvent) {
         String portString = (String) removeSlavePortNumChoiceBox.getSelectionModel().getSelectedItem();
         int port = Integer.valueOf(portString);
-        ModbusSlaveTabPaneModel modbusSlaveTabPaneModel = modbusMainModel.getModbusSlaveTabPaneModel(port);
+        ModbusSlave modbusSlave = modbusMainModel.getSlave(port);
+        ModbusSlaveTabPaneModel modbusSlaveTabPaneModel = modbusMainModel.getModbusSlaveTabPaneModel(modbusSlave);
         modbusMainModel.removeModbusSlaveTabPaneModel(modbusSlaveTabPaneModel);
         modbusMainModel.removeSlave(port);
         Stage stage = (Stage) RemoveServerPopup.getScene().getWindow();
-
         stage.close();
     }
+
     public void updateRemoveSlavePortNumChoiceBox(){
         ArrayList<ModbusSlave> slaves = modbusMainModel.getSlaves();
         removeSlavePortNumChoiceBox.getItems().clear();

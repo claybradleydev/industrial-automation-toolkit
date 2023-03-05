@@ -12,9 +12,9 @@
 
 <BorderPane fx:id="ModbusMain" prefHeight="726.0" prefWidth="1016.0" style="-fx-background-color: #181818;" stylesheets="@../../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.claybradley.industrialautomationtoolkit.modbus.ModbusMainController">
    <left>
-      <VBox style="-fx-border-color: #3D3C3D #3D3C3D; -fx-border-width: 1;" BorderPane.alignment="CENTER">
+      <VBox style="-fx-border-color: #3D3C3D #3D3C3D; -fx-border-width: 1; -fx-background-color: #212121;" BorderPane.alignment="CENTER">
          <children>
-            <HBox fx:id="addRemoveRefreshHBox" alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" spacing="10.0" style="-fx-background-color: #242526;">
+            <HBox fx:id="addRemoveRefreshHBox" alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" spacing="10.0" style="-fx-background-color: #212121;">
                <children>
                   <Label fx:id="addDeviceLabel" text="+" textFill="WHITE">
                      <font>
@@ -39,17 +39,17 @@
             </HBox>
             <TreeView fx:id="treeView" onMouseClicked="#clickSelectTreeItem" style="-fx-border-color: #3D3C3D; -fx-border-width: 0;" VBox.vgrow="ALWAYS">
                <VBox.margin>
-                  <Insets top="5.0" />
+                  <Insets />
                </VBox.margin>
             </TreeView>
          </children>
          <BorderPane.margin>
-            <Insets top="35.0" />
+            <Insets right="20.0" />
          </BorderPane.margin>
       </VBox>
    </left>
    <top>
-      <FlowPane fx:id="selectedSlaveFlowPane" alignment="CENTER" BorderPane.alignment="CENTER">
+      <FlowPane fx:id="selectedSlaveFlowPane" alignment="CENTER" style="-fx-background-color: #212121; -fx-border-color: #3D3C3D #3D3C3D #3D3C3D #3D3C3D; -fx-border-width: 1;" BorderPane.alignment="CENTER">
          <children>
             <Label style="-fx-text-fill: #B3B3B3;" text="Modbus Server">
                <font>
@@ -102,6 +102,9 @@
          <BorderPane.margin>
             <Insets bottom="20.0" top="20.0" />
          </BorderPane.margin>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
       </FlowPane>
    </top>
 </BorderPane>

@@ -26,15 +26,17 @@ import java.util.ResourceBundle;
 @Component
 @Scope("prototype")
 public class ModbusSlaveTabPaneController implements Initializable {
-    public HBox ModbusSlaveTabPane;
-    public TabPane ModbusSlaveTabPanePane;
-    public VBox ModbusConfigTab;
-    @FXML
-    private Tab ModbusConfigTabTab;
+
     @Autowired
     ModbusMainModel modbusMainModel;
     @Autowired
     ApplicationContext applicationContext;
+
+    @FXML
+    private TabPane ModbusSlaveTabPanePane;
+    @FXML
+    private Tab ModbusConfigTabTab;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -48,16 +50,15 @@ public class ModbusSlaveTabPaneController implements Initializable {
             throw new RuntimeException(ex);
         }
 
-
-
         ModbusSlave modbusSlave = modbusMainModel.getSelectedSlave();
-        int tab = modbusMainModel.getModbusSlaveTabPaneModel(modbusSlave.getPort()).getSelectedTab();
-        ModbusSlaveTabPanePane.getSelectionModel().selectFirst();
+        int tab = modbusMainModel.getModbusSlaveTabPaneModel(modbusSlave).getSelectedTab();
+        ModbusSlaveTabPanePane.getSelectionModel().select(tab);
     }
+
     @FXML
     private void switchTabClick(MouseEvent mouseEvent) {
-        int port = modbusMainModel.getSelectedSlave().getPort();
-        modbusMainModel.getModbusSlaveTabPaneModel(port).setSelectedTab(ModbusSlaveTabPanePane.getSelectionModel().getSelectedIndex());
+        ModbusSlave modbusSlave = modbusMainModel.getSelectedSlave();
+        modbusMainModel.getModbusSlaveTabPaneModel(modbusSlave).setSelectedTab(ModbusSlaveTabPanePane.getSelectionModel().getSelectedIndex());
     }
 
 }

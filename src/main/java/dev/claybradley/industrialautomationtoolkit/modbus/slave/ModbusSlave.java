@@ -31,14 +31,6 @@ public class ModbusSlave {
         this.runningAsString = new SimpleStringProperty("Not Connected");
     }
 
-    public ModbusTcpSlave getModbusTcpSlave() {
-        return modbusTcpSlave;
-    }
-
-    public ServiceRequestHandlerIml getRequestHandler() {
-        return requestHandler;
-    }
-
     public void start() throws ExecutionException, InterruptedException {
         modbusTcpSlave.setRequestHandler(requestHandler);
         modbusTcpSlave.bind(ipAddress, port).get();
@@ -74,4 +66,11 @@ public class ModbusSlave {
         return runningAsString;
     }
 
-}
+
+    public ModbusTcpSlave getModbusTcpSlave() {
+        return modbusTcpSlave;
+    }
+
+    public ServiceRequestHandlerIml getRequestHandler() {
+        return requestHandler;
+    }}

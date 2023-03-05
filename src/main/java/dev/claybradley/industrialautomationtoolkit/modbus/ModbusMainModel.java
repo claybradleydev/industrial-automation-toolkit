@@ -11,9 +11,10 @@ public class ModbusMainModel {
 
     private final ArrayList<ModbusSlave> slaves;
 
-
     private final ArrayList<ModbusSlaveTabPaneModel> modbusSlaveTabPaneModels;
+
     private ModbusSlave selectedSlave;
+
 
     public ModbusMainModel(){
 
@@ -22,11 +23,9 @@ public class ModbusMainModel {
         this.modbusSlaveTabPaneModels = new ArrayList<>();
 
         ModbusSlave newModbusSlave = addSlave("192.168.1.16", 5020);
-        ModbusSlaveTabPaneModel modbusSlaveTabPaneModel = new ModbusSlaveTabPaneModel(5020, newModbusSlave);
+        ModbusSlaveTabPaneModel modbusSlaveTabPaneModel = new ModbusSlaveTabPaneModel(newModbusSlave);
         addModbusSlaveTabPaneModel(modbusSlaveTabPaneModel);
     }
-
-
 
     public ModbusSlave addSlave(String ipAddress, int port){
         ServiceRequestHandlerIml serviceRequestHandlerIml = new ServiceRequestHandlerIml();
@@ -52,6 +51,15 @@ public class ModbusMainModel {
         return null;
     }
 
+    public ModbusSlaveTabPaneModel getModbusSlaveTabPaneModel(ModbusSlave modbusSlave){
+        for(ModbusSlaveTabPaneModel modbusSlaveTabPaneModel: modbusSlaveTabPaneModels){
+            if(modbusSlaveTabPaneModel.getPort() == modbusSlave.getPort()){
+                return modbusSlaveTabPaneModel;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<ModbusSlave> getSlaves() {
         return slaves;
     }
@@ -64,26 +72,11 @@ public class ModbusMainModel {
         return selectedSlave;
     }
 
-    public ArrayList<ModbusSlaveTabPaneModel> getModbusSlaveTabPaneModels() {
-        return modbusSlaveTabPaneModels;
-    }
-
-    public ModbusSlaveTabPaneModel getModbusSlaveTabPaneModel(int port){
-        for(ModbusSlaveTabPaneModel modbusSlaveTabPaneModel: modbusSlaveTabPaneModels){
-            if(modbusSlaveTabPaneModel.getPort() == port){
-                return modbusSlaveTabPaneModel;
-            }
-        }
-        return null;
-    }
-
     public void removeModbusSlaveTabPaneModel(ModbusSlaveTabPaneModel modbusSlaveTabPaneModel){
-
         modbusSlaveTabPaneModels.remove(modbusSlaveTabPaneModel);
     }
 
     public void addModbusSlaveTabPaneModel(ModbusSlaveTabPaneModel modbusSlaveTabPaneModel){
-
         modbusSlaveTabPaneModels.add(modbusSlaveTabPaneModel);
     }
 }

@@ -25,14 +25,13 @@ import java.util.concurrent.ExecutionException;
 @Component
 @Scope("prototype")
 public class ConfigTabController implements Initializable {
-    public VBox ModbusConfigTab;
+
+    @Autowired
+    ModbusMainModel modbusMainModel;
     @FXML
     private Label ipAddressLabel;
     @FXML
     private Label portNumberLabel;
-    @Autowired
-    ModbusMainModel modbusMainModel;
-
 
     @FXML
     private Label deviceConnectedLabel;
@@ -42,6 +41,12 @@ public class ConfigTabController implements Initializable {
     private Button disconnectBtn;
 
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        updateDeviceConnectedLabel();
+        updateIpAndPortLabels();
+
+    }
     public void clickConnectBtn(ActionEvent actionEvent) throws ExecutionException, InterruptedException {
         ModbusSlave selectedSlave = modbusMainModel.getSelectedSlave();
         if(selectedSlave != null){
@@ -60,13 +65,6 @@ public class ConfigTabController implements Initializable {
             }
         }
         updateDeviceConnectedLabel();
-
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-    updateDeviceConnectedLabel();
-    updateIpAndPortLabels();
 
     }
 

@@ -38,14 +38,16 @@ public class JavaFxApplication extends Application {
         applicationContext.close();
         Platform.exit();
     }
+
+
     static class StageReadyEvent extends ApplicationEvent{
         public StageReadyEvent(Stage stage){
             super(stage);
         }
-
         public Stage getStage() {
             return((Stage) getSource());
         }
+
     }
 
 }

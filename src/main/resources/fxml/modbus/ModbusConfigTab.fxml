@@ -7,11 +7,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="ModbusConfigTab" alignment="TOP_CENTER" style="-fx-background-color: #181818; -fx-border-color: #3D3C3D #3D3C3D; -fx-border-width: 1;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.configtab.ConfigTabController">
+<VBox fx:id="ModbusConfigTab" alignment="TOP_CENTER" style="-fx-background-color: #212121;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.configtab.ConfigTabController">
    <children>
       <HBox VBox.vgrow="NEVER">
          <children>
-            <VBox alignment="CENTER" style="-fx-background-color: #242526; -fx-background-radius: 20;">
+            <VBox alignment="CENTER" style="-fx-background-color: #212121; -fx-background-radius: 20;">
                <children>
                   <Label text="IP Adress:" textFill="WHITE" />
                   <Label fx:id="ipAddressLabel" text="192.168.69.69" textFill="WHITE">
@@ -43,7 +43,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin>
             </VBox>
-            <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #242526; -fx-background-radius: 20;" HBox.hgrow="NEVER">
+            <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #212121; -fx-background-radius: 20;" HBox.hgrow="NEVER">
                <children>
                   <Label fx:id="deviceConnectedLabel" text="Device Not Connected" textFill="WHITE" />
                   <Button fx:id="connectBtn" mnemonicParsing="false" onAction="#clickConnectBtn" prefWidth="80.0" text="Connect" />
@@ -57,6 +57,9 @@
                </padding>
             </VBox>
          </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
       </HBox>
    </children>
    <padding>

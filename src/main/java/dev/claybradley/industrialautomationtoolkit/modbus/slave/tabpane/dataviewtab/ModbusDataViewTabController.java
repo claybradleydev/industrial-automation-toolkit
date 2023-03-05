@@ -1,10 +1,12 @@
 package dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.dataviewtab;
 
 import dev.claybradley.industrialautomationtoolkit.modbus.ModbusMainModel;
+import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
@@ -23,13 +25,14 @@ import java.util.TimerTask;
 @Scope("prototype")
 public class ModbusDataViewTabController implements Initializable {
 
-    public VBox PollingTab;
-    public VBox ModbusDataViewTab;
-    private Timer timer;
-
     @Autowired
     ModbusMainModel modbusMainModel;
+
     private ModbusDataViewTabModel modbusDataViewTabModel;
+
+    private Timer timer;
+    @FXML
+    private ChoiceBox functionCodeChioceBox;
     @FXML
     private TextField addressTextField;
     @FXML
@@ -38,23 +41,13 @@ public class ModbusDataViewTabController implements Initializable {
     private TextField unitIdTextField;
     @FXML
     private FlowPane addressValueFlowPane;
-    @FXML
-    private void clickUpdateLabelsBtn(ActionEvent actionEvent) {
-        updateAddressLabelFlowPane();
-    }
-
-    public ModbusDataViewTabController(){
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.timer = new Timer();
 
-        int port = modbusMainModel.getSelectedSlave().getPort();
-        this.modbusDataViewTabModel = modbusMainModel.getModbusSlaveTabPaneModel(port).getModbusPollingTabModel();
-        if(modbusDataViewTabModel.isPolling()){
-            startPolling();
-        }
+        ModbusSlave modbusSlave = modbusMainModel.getSelectedSlave();
+        this.modbusDataViewTabModel = modbusMainModel.getModbusSlaveTabPaneModel(modbusSlave).getModbusDataViewTabModel();
+
         unitIdTextField.setText(String.valueOf(modbusDataViewTabModel.getUnitId()));
         addressTextField.setText(String.valueOf(modbusDataViewTabModel.getAddress()));
         quantityTextField.setText(String.valueOf(modbusDataViewTabModel.getQuantity()));
@@ -93,7 +86,6 @@ public class ModbusDataViewTabController implements Initializable {
 
     public void startPolling(){
         timer = new Timer();
-
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {

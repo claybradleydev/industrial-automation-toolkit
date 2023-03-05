@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="ModbusDataViewTab" spacing="20.0" style="-fx-background-color: #181818; -fx-border-color: #3D3C3D; -fx-border-width: 1;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.dataviewtab.ModbusDataViewTabController">
+<VBox fx:id="ModbusDataViewTab" prefHeight="596.0" prefWidth="551.0" spacing="20.0" style="-fx-background-color: #212121;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.dataviewtab.ModbusDataViewTabController">
    <children>
       <FlowPane alignment="CENTER">
          <children>
@@ -50,14 +51,30 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </FlowPane.margin>
             </VBox>
+            <VBox alignment="CENTER">
+               <children>
+                  <Label text="Functio n Code" textFill="WHITE">
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <ChoiceBox fx:id="functionCodeChioceBox" prefWidth="150.0" />
+               </children>
+               <FlowPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </FlowPane.margin>
+            </VBox>
          </children>
          <VBox.margin>
             <Insets />
          </VBox.margin>
       </FlowPane>
-      <ScrollPane style="-fx-fit-to-width: true; -fx-fit-to-height: true; -fx-background-color: #181818;" VBox.vgrow="ALWAYS">
+      <ScrollPane pannable="true" style="-fx-fit-to-width: true; -fx-fit-to-height: true; -fx-background-color: #212121;" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
          <content>
-            <FlowPane fx:id="addressValueFlowPane" alignment="TOP_CENTER" hgap="5.0" style="-fx-background-color: #181818;" stylesheets="@../../css/application.css" vgap="5.0" />
+            <FlowPane fx:id="addressValueFlowPane" hgap="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" rowValignment="TOP" style="-fx-background-color: #212121;" stylesheets="@../../css/application.css" vgap="5.0">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding></FlowPane>
          </content>
          <VBox.margin>
             <Insets />
