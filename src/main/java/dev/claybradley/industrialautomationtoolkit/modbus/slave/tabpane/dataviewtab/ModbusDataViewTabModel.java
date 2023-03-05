@@ -1,12 +1,10 @@
-package dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.pollingtab;
+package dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.dataviewtab;
 
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
-import javafx.scene.control.Label;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class ModbusPollingTabModel {
+public class ModbusDataViewTabModel {
     private int address;
     private int quantity;
     private int unitId;
@@ -17,7 +15,7 @@ public class ModbusPollingTabModel {
 
     private final ModbusSlave modbusSlave;
 
-    public ModbusPollingTabModel(ModbusSlave modbusSlave) {
+    public ModbusDataViewTabModel(ModbusSlave modbusSlave) {
         this.modbusSlave = modbusSlave;
         this.address = 0;
         this.quantity = 10;

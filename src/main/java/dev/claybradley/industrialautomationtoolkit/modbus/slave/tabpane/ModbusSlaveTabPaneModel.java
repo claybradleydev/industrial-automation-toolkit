@@ -1,10 +1,10 @@
 package dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane;
 
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
-import dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.pollingtab.ModbusPollingTabModel;
+import dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.dataviewtab.ModbusDataViewTabModel;
 
 public class ModbusSlaveTabPaneModel {
-    private final ModbusPollingTabModel modbusPollingTabModel;
+    private final ModbusDataViewTabModel modbusDataViewTabModel;
     private int selectedTab;
     private int port;
 
@@ -13,7 +13,7 @@ public class ModbusSlaveTabPaneModel {
     public ModbusSlaveTabPaneModel(int port, ModbusSlave modbusSlave) {
         this.port = port;
         this.modbusSlave = modbusSlave;
-        modbusPollingTabModel = new ModbusPollingTabModel(modbusSlave);
+        modbusDataViewTabModel = new ModbusDataViewTabModel(modbusSlave);
         selectedTab = 0;
     }
 
@@ -33,7 +33,7 @@ public class ModbusSlaveTabPaneModel {
         this.port = port;
     }
 
-    public ModbusPollingTabModel getModbusPollingTabModel() {
-        return modbusPollingTabModel;
+    public ModbusDataViewTabModel getModbusPollingTabModel() {
+        return modbusDataViewTabModel;
     }
 }

@@ -19,15 +19,38 @@ public class ModbusSlaveMemory {
 
     public int[] getHoldingRegisters(int address, int quantity){
         int[] requestedRegisters = new int[quantity];
-        for(int i = address; i < i + quantity; ++i){
-            requestedRegisters[i - address] = holdingRegisters[i];
+        for(int i = 0; i < quantity; ++i){
+            requestedRegisters[i] = holdingRegisters[i + address];
         }
         return requestedRegisters;
     }
-    public int[] getInputRegisters() {
-        return inputRegisters;
+    public int[] getInputRegisters(int address, int quantity) {
+        int[] requestedRegisters = new int[quantity];
+        for(int i = 0; i < quantity; ++i){
+            requestedRegisters[i] = inputRegisters[i + address];
+        }
+        return requestedRegisters;
     }
+
+    public boolean[] getCoils(int address, int quantity) {
+        boolean[] requestedCoils = new boolean[quantity];
+        for(int i = 0; i < quantity; ++i){
+            requestedCoils[i] = coils[i + address];
+        }
+        return requestedCoils;
+    }
+
+    public boolean[] getDiscreteInputs(int address, int quantity) {
+        boolean[] requestedDiscreteInputs = new boolean[quantity];
+        for(int i = 0; i < quantity; ++i){
+            requestedDiscreteInputs[i] = discreteInputs[i + address];
+        }
+        return requestedDiscreteInputs;
+    }
+
     public void setHoldingRegister(int address, int value){
         holdingRegisters[address] = value;
     }
+
+
 }

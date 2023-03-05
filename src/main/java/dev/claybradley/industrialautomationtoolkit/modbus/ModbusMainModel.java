@@ -3,7 +3,6 @@ package dev.claybradley.industrialautomationtoolkit.modbus;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ServiceRequestHandlerIml;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.ModbusSlaveTabPaneModel;
-import dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.pollingtab.ModbusPollingTabModel;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -21,6 +20,10 @@ public class ModbusMainModel {
         slaves = new ArrayList<>();
 
         this.modbusSlaveTabPaneModels = new ArrayList<>();
+
+        ModbusSlave newModbusSlave = addSlave("192.168.1.16", 5020);
+        ModbusSlaveTabPaneModel modbusSlaveTabPaneModel = new ModbusSlaveTabPaneModel(5020, newModbusSlave);
+        addModbusSlaveTabPaneModel(modbusSlaveTabPaneModel);
     }
 
 

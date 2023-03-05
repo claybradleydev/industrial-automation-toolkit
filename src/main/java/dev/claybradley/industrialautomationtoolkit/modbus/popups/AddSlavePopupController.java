@@ -1,16 +1,13 @@
 package dev.claybradley.industrialautomationtoolkit.modbus.popups;
 
-import dev.claybradley.industrialautomationtoolkit.main.MainController;
-import dev.claybradley.industrialautomationtoolkit.modbus.ModbusMainController;
 import dev.claybradley.industrialautomationtoolkit.modbus.ModbusMainModel;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.ModbusSlaveTabPaneModel;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,10 +17,11 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
 @Component
-public class AddServerPopupController implements Initializable {
+public class AddSlavePopupController implements Initializable {
     @Autowired
     public ModbusMainModel modbusMainModel;
-    public AnchorPane rootAnchorPane;
+    @FXML
+    public HBox AddServerPopup;
     @FXML
     private TextField addSlavePortNumTextField;
     @FXML
@@ -34,20 +32,16 @@ public class AddServerPopupController implements Initializable {
             return;
         }
         ModbusSlave newModbusSlave = modbusMainModel.addSlave("192.168.1.16", portNumber);
-
         ModbusSlaveTabPaneModel modbusSlaveTabPaneModel = new ModbusSlaveTabPaneModel(portNumber, newModbusSlave);
         modbusMainModel.addModbusSlaveTabPaneModel(modbusSlaveTabPaneModel);
-
-        Stage stage = (Stage) rootAnchorPane.getScene().getWindow();
-        // do what you have to do
+        Stage stage = (Stage) AddServerPopup.getScene().getWindow();
         stage.close();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addSlavePortNumTextField.setText("5020");
-        addSlavePortNumTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("textfield changed from " + oldValue + " to " + newValue);
-        });
+
+
     }
 }
