@@ -4,16 +4,13 @@ import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.dataviewtab.ModbusDataViewTabModel;
 
 public class ModbusSlaveTabPaneModel {
-
-    private final ModbusDataViewTabModel modbusDataViewTabModel;
-    private final ModbusSlave modbusSlave;
+    private ModbusSlave modbusSlave;
+    private ModbusDataViewTabModel modbusDataViewTabModel;
     private int selectedTab;
-
 
     public ModbusSlaveTabPaneModel(ModbusSlave modbusSlave) {
         this.modbusSlave = modbusSlave;
-        modbusDataViewTabModel = new ModbusDataViewTabModel(modbusSlave);
-        selectedTab = 0;
+        this.modbusDataViewTabModel = new ModbusDataViewTabModel(modbusSlave);
     }
 
     public int getSelectedTab() {
@@ -23,11 +20,9 @@ public class ModbusSlaveTabPaneModel {
         this.selectedTab = selectedTab;
     }
 
-    public int getPort() {
-        return modbusSlave.getPort();
-    }
-
     public ModbusDataViewTabModel getModbusDataViewTabModel() {
         return modbusDataViewTabModel;
     }
+
+
 }

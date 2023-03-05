@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane fx:id="rootbp" prefHeight="351.0" prefWidth="548.0" style="-fx-background-color: #181818;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.claybradley.industrialautomationtoolkit.main.MainController">
+<BorderPane fx:id="rootbp" prefHeight="351.0" prefWidth="548.0" style="-fx-background-color: #181818;" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.claybradley.industrialautomationtoolkit.main.MainController">
    <left>
       <VBox fx:id="sidenavvbox" alignment="TOP_CENTER" style="-fx-background-color: #181818;" BorderPane.alignment="CENTER">
          <children>
@@ -20,20 +20,12 @@
                   <Insets bottom="50.0" top="20.0" />
                </VBox.margin>
             </Label>
-            <Button mnemonicParsing="false" onAction="#navhome" style="-fx-background-color: transparent;" text="Home" textFill="WHITE">
+            <Button mnemonicParsing="false" onAction="#navhome" style="-fx-background-color: transparent; -fx-border-color: transparent;" text="Home" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#navmodbus" style="-fx-background-color: transparent;" text="Modbus" textFill="WHITE">
-               <font>
-                  <Font size="15.0" />
-               </font>
-               <VBox.margin>
-                  <Insets top="5.0" />
-               </VBox.margin>
-            </Button>
-            <Button layoutX="10.0" layoutY="43.0" mnemonicParsing="false" onAction="#navpage02" style="-fx-background-color: transparent;" text="Page 02" textFill="WHITE">
+            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#navmodbus" style="-fx-background-color: transparent; -fx-border-color: transparent transparent;" text="Modbus" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>
@@ -41,7 +33,15 @@
                   <Insets top="5.0" />
                </VBox.margin>
             </Button>
-            <Button layoutX="10.0" layoutY="76.0" mnemonicParsing="false" onAction="#navpage03" style="-fx-background-color: transparent;" text="Page 03" textFill="WHITE">
+            <Button layoutX="10.0" layoutY="43.0" mnemonicParsing="false" onAction="#navpage02" style="-fx-background-color: transparent; -fx-border-color: transparent transparent;" text="Page 02" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Button>
+            <Button layoutX="10.0" layoutY="76.0" mnemonicParsing="false" onAction="#navpage03" style="-fx-background-color: transparent; -fx-border-color: transparent transparent;" text="Page 03" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>

@@ -36,8 +36,6 @@ public class RemoveSlavePopupController implements Initializable {
         String portString = (String) removeSlavePortNumChoiceBox.getSelectionModel().getSelectedItem();
         int port = Integer.valueOf(portString);
         ModbusSlave modbusSlave = modbusMainModel.getSlave(port);
-        ModbusSlaveTabPaneModel modbusSlaveTabPaneModel = modbusMainModel.getModbusSlaveTabPaneModel(modbusSlave);
-        modbusMainModel.removeModbusSlaveTabPaneModel(modbusSlaveTabPaneModel);
         modbusMainModel.removeSlave(port);
         Stage stage = (Stage) RemoveServerPopup.getScene().getWindow();
         stage.close();

@@ -141,6 +141,7 @@ public class ModbusMainController implements Initializable {
     }
 
     private void hideModbusSlaveTabPane(){
+        ModbusMain.setCenter(null);
     }
 
     public void buildTreeView(){

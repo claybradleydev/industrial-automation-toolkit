@@ -2,29 +2,28 @@ package dev.claybradley.industrialautomationtoolkit.modbus.slave;
 
 import com.digitalpetri.modbus.slave.ModbusTcpSlave;
 import com.digitalpetri.modbus.slave.ModbusTcpSlaveConfig;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
+import dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.ModbusSlaveTabPaneModel;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableBooleanValue;
 
 import java.util.concurrent.ExecutionException;
 
 public class ModbusSlave {
     private final ModbusTcpSlave modbusTcpSlave;
     private final ServiceRequestHandlerIml requestHandler;
+    private final ModbusSlaveTabPaneModel modbusSlaveTabPaneModel;
     private final String ipAddress;
     private final int port;
     private BooleanProperty running;
     private StringProperty runningAsString;
 
-    public ModbusSlave(ServiceRequestHandlerIml requestHandler, String ipAddress, int port) {
+    public ModbusSlave(String ipAddress, int port) {
+        this.modbusSlaveTabPaneModel = new ModbusSlaveTabPaneModel(this);
+        this.requestHandler = new ServiceRequestHandlerIml();
         ModbusTcpSlaveConfig config = new ModbusTcpSlaveConfig.Builder().build();
         this.modbusTcpSlave = new ModbusTcpSlave(config);
-        this.requestHandler = requestHandler;
         this.ipAddress = ipAddress;
         this.port = port;
         this.running = new SimpleBooleanProperty();
@@ -73,4 +72,9 @@ public class ModbusSlave {
 
     public ServiceRequestHandlerIml getRequestHandler() {
         return requestHandler;
-    }}
+    }
+
+    public ModbusSlaveTabPaneModel getModbusSlaveTabPaneModel() {
+        return modbusSlaveTabPaneModel;
+    }
+}

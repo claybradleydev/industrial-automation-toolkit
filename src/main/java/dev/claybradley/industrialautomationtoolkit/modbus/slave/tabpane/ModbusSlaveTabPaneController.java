@@ -51,14 +51,15 @@ public class ModbusSlaveTabPaneController implements Initializable {
         }
 
         ModbusSlave modbusSlave = modbusMainModel.getSelectedSlave();
-        int tab = modbusMainModel.getModbusSlaveTabPaneModel(modbusSlave).getSelectedTab();
+
+        int tab = modbusMainModel.getSelectedSlave().getModbusSlaveTabPaneModel().getSelectedTab();
         ModbusSlaveTabPanePane.getSelectionModel().select(tab);
     }
 
     @FXML
     private void switchTabClick(MouseEvent mouseEvent) {
-        ModbusSlave modbusSlave = modbusMainModel.getSelectedSlave();
-        modbusMainModel.getModbusSlaveTabPaneModel(modbusSlave).setSelectedTab(ModbusSlaveTabPanePane.getSelectionModel().getSelectedIndex());
+        int tab = ModbusSlaveTabPanePane.getSelectionModel().getSelectedIndex();
+        modbusMainModel.getSelectedSlave().getModbusSlaveTabPaneModel().setSelectedTab(tab);
     }
 
 }

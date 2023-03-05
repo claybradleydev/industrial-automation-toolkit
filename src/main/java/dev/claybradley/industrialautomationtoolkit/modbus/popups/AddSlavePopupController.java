@@ -32,8 +32,6 @@ public class AddSlavePopupController implements Initializable {
             return;
         }
         ModbusSlave newModbusSlave = modbusMainModel.addSlave("192.168.1.16", portNumber);
-        ModbusSlaveTabPaneModel modbusSlaveTabPaneModel = new ModbusSlaveTabPaneModel(newModbusSlave);
-        modbusMainModel.addModbusSlaveTabPaneModel(modbusSlaveTabPaneModel);
         Stage stage = (Stage) AddServerPopup.getScene().getWindow();
         stage.close();
     }

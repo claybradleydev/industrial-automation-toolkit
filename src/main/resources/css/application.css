@@ -1,13 +1,9 @@
 
-
-.label{
-
-    -fx-fill: white;
-}
 .tree-view .tree-cell {
     -fx-background-color: #212121;
-    -fx-text-fill: #ffffff ;
+    -fx-text-fill: #B3B3B3;
 }
+
 .tree-view{
     -fx-background-color: #212121;
     -fx-border-width: 0;
@@ -20,16 +16,41 @@
     -fx-background-color: #212121;
     -fx-border-color: #3D3C3D;
 }
+
 .tab-label{
-    -fx-text-fill: white;
+    -fx-text-fill: #B3B3B3;
 }
+
 .tab-header-background {
-    -fx-background-color: #3D3C3D;
+    -fx-background-color: #212121;
+    -fx-border-color: #3D3C3D;
+}
+
+.choice-box{
+    -fx-background-color: #212121;
+    -fx-border-color: #3D3C3D;
+    -fx-border-width: 1;
+    -fx-text-fill: #B3B3B3;
+}
+
+.scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+
+.scroll-bar:horizontal .thumb,
+    .scroll-bar:vertical.thumb{
+    -fx-background-color: #B3B3B3;
+}
+
+.text-field{
+    -fx-background-color: #212121;
+    -fx-border-color: #3D3C3D;
+    -fx-border-width: 1;
+    -fx-text-fill: #B3B3B3;
 }
 
 .tab{
     -fx-background-color:  #212121;
-    -fx-text-fill: #ffffff ;
     -fx-pref-height: 30;
     -fx-border-width: 1;
     -fx-border-color: #3D3C3D;
@@ -41,7 +62,7 @@
 
 .menu-item{
     -fx-background-color: black;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: #B3B3B3;
     -fx-cursor: hand;
 }
 
@@ -49,4 +70,16 @@
     -fx-effect: null;
     -fx-background-color: black;
     -fx-background-insets: 0.5;
+    -fx-border-color: #3D3C3D;
+    -fx-border-width: 1.5;
+}
+
+.label{
+    -fx-text-fill: #B3B3B3;
+}
+
+.button{
+    -fx-text-fill: #B3B3B3;
+    -fx-background-color: #212121;
+    -fx-border-color: #3D3C3D;
 }

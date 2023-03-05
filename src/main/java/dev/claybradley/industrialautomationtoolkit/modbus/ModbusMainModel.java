@@ -11,8 +11,6 @@ public class ModbusMainModel {
 
     private final ArrayList<ModbusSlave> slaves;
 
-    private final ArrayList<ModbusSlaveTabPaneModel> modbusSlaveTabPaneModels;
-
     private ModbusSlave selectedSlave;
 
 
@@ -20,16 +18,12 @@ public class ModbusMainModel {
 
         slaves = new ArrayList<>();
 
-        this.modbusSlaveTabPaneModels = new ArrayList<>();
-
         ModbusSlave newModbusSlave = addSlave("192.168.1.16", 5020);
-        ModbusSlaveTabPaneModel modbusSlaveTabPaneModel = new ModbusSlaveTabPaneModel(newModbusSlave);
-        addModbusSlaveTabPaneModel(modbusSlaveTabPaneModel);
+
     }
 
     public ModbusSlave addSlave(String ipAddress, int port){
-        ServiceRequestHandlerIml serviceRequestHandlerIml = new ServiceRequestHandlerIml();
-        ModbusSlave modbusSlave = new ModbusSlave(serviceRequestHandlerIml, ipAddress, port);
+        ModbusSlave modbusSlave = new ModbusSlave(ipAddress, port);
         slaves.add(modbusSlave);
         selectedSlave = modbusSlave;
         return modbusSlave;
@@ -51,15 +45,6 @@ public class ModbusMainModel {
         return null;
     }
 
-    public ModbusSlaveTabPaneModel getModbusSlaveTabPaneModel(ModbusSlave modbusSlave){
-        for(ModbusSlaveTabPaneModel modbusSlaveTabPaneModel: modbusSlaveTabPaneModels){
-            if(modbusSlaveTabPaneModel.getPort() == modbusSlave.getPort()){
-                return modbusSlaveTabPaneModel;
-            }
-        }
-        return null;
-    }
-
     public ArrayList<ModbusSlave> getSlaves() {
         return slaves;
     }
@@ -72,11 +57,4 @@ public class ModbusMainModel {
         return selectedSlave;
     }
 
-    public void removeModbusSlaveTabPaneModel(ModbusSlaveTabPaneModel modbusSlaveTabPaneModel){
-        modbusSlaveTabPaneModels.remove(modbusSlaveTabPaneModel);
-    }
-
-    public void addModbusSlaveTabPaneModel(ModbusSlaveTabPaneModel modbusSlaveTabPaneModel){
-        modbusSlaveTabPaneModels.add(modbusSlaveTabPaneModel);
-    }
 }
