@@ -3,8 +3,11 @@ package dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.datavie
 import dev.claybradley.industrialautomationtoolkit.modbus.ModbusMainModel;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
 import javafx.application.Platform;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -15,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 @Component
 @Scope("prototype")
@@ -41,6 +41,7 @@ public class ModbusDataViewTabController implements Initializable {
     private TextField unitIdTextField;
     @FXML
     private FlowPane addressValueFlowPane;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -66,28 +67,27 @@ public class ModbusDataViewTabController implements Initializable {
 
         initializeFunctionCodeChoiceBox();
 
-        startPolling();
-    }
+        modbusDataViewTabModel.startPolling();
 
-    public void startPolling(){
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
+        modbusDataViewTabModel.getDataValues().addListener(new ListChangeListener() {
             @Override
-            public void run() {
+            public void onChanged(Change change) {
                 updateAddressLabelFlowPane();
             }
-        }, 0, 500);
+        });
     }
+
 
     private void updateAddressLabelFlowPane() {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 addressValueFlowPane.getChildren().clear();
-                ArrayList<String> values = modbusDataViewTabModel.pollSlave();
-                for (int i = 0; i < values.size(); ++i) {
-                    Label label = new Label(values.get(i));
-                    label.setStyle("-fx-pref-width: 150;");
+                ObservableList<StringProperty> dataValues = modbusDataViewTabModel.getDataValues();
+                Iterator<StringProperty> iterator = dataValues.iterator();
+                while(iterator.hasNext()) {
+                    Label label = new Label(iterator.next().getValue());
+                    label.setStyle("-fx-pref-width: 100;");
                     addressValueFlowPane.getChildren().add(label);
                 }
             }

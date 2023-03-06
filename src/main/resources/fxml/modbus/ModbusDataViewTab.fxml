@@ -71,7 +71,7 @@
       </FlowPane>
       <ScrollPane pannable="true" style="-fx-fit-to-width: true; -fx-fit-to-height: true; -fx-background-color: #212121;" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
          <content>
-            <FlowPane fx:id="addressValueFlowPane" hgap="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" rowValignment="TOP" style="-fx-background-color: #212121;" stylesheets="@../../css/application.css" vgap="5.0">
+            <FlowPane fx:id="addressValueFlowPane" hgap="5.0" maxWidth="1.7976931348623157E308" orientation="VERTICAL" rowValignment="TOP" style="-fx-background-color: #212121;" stylesheets="@../../css/application.css" vgap="5.0">
                <padding>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </padding></FlowPane>

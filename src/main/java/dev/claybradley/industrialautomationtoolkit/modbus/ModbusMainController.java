@@ -3,7 +3,12 @@ package dev.claybradley.industrialautomationtoolkit.modbus;
 import dev.claybradley.industrialautomationtoolkit.main.MainController;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.ModbusSlaveTabPaneController;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +28,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.swing.event.ChangeListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -38,9 +44,9 @@ public class ModbusMainController implements Initializable {
 
     @Autowired
     ApplicationContext applicationContext;
-
     @Autowired
     ModbusMainModel modbusMainModel;
+
     private TreeItem<String> branchServers;
     private TreeItem<String> branchClients;
     private Timer timer;
@@ -60,13 +66,11 @@ public class ModbusMainController implements Initializable {
     @FXML
     private Label removeDeviceLabel;
 
-
     @FXML
     private ChoiceBox removeSlavePortNumChoiceBox;
 
     @FXML
     private TreeView treeView;
-
 
 
     @Override
@@ -77,31 +81,39 @@ public class ModbusMainController implements Initializable {
 
         this.timer = new Timer();
 
-        if(modbusMainModel.getSelectedSlave() != null) {
-            bindSelectedSlave();
+        bindServersTreeBranch();
+
+        if(modbusMainModel.getSelectedSlave() != null){
+            showSelectedSlave();
+        } else {
+            selectedSlaveFlowPane.setVisible(false);
         }
 
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                updateBranchServers();
-            }
-        }, 0, 1000);
     }
 
-    public void updateBranchServers(){
-        ArrayList<ModbusSlave> slaves = modbusMainModel.getSlaves();
-        branchServers.getChildren().clear();
-        for(ModbusSlave modbusSlave: slaves){
-            if(modbusSlave.isRunning().get()) {
-                TreeItem<String> branchServer = new TreeItem<>(" " + modbusSlave.getIpAddress() + ":" + String.valueOf(modbusSlave.getPort()), new ImageView(new Image("images/PlcPng.png")));
-                branchServers.getChildren().add(branchServer);
-            } else{
-                TreeItem<String> branchServer = new TreeItem<>(" " + modbusSlave.getIpAddress() + ":" + String.valueOf(modbusSlave.getPort()), new ImageView(new Image("images/381599_error_icon.png")));
-                branchServers.getChildren().add(branchServer);
-            }
 
-        }
+    public void bindServersTreeBranch(){
+        updateServersTreeBranch();
+        modbusMainModel.getSlaves().addListener(new ListChangeListener<ModbusSlave>() {
+            @Override
+            public void onChanged(Change<? extends ModbusSlave> change) {
+                updateServersTreeBranch();
+            }
+        });
+    }
+
+    private void updateServersTreeBranch() {
+        branchServers.getChildren().clear();
+       ObservableList<ModbusSlave> slaves = modbusMainModel.getSlaves();
+       for(ModbusSlave slave: slaves){
+           if(slave.isRunning().get()){
+           TreeItem treeItem = new TreeItem<>(" Localhost : " + slave.getPort(), new ImageView(new Image("images/PlcPng.png")));
+           branchServers.getChildren().add(treeItem);
+           } else{
+               TreeItem treeItem = new TreeItem<>(" Localhost : " + slave.getPort(), new ImageView(new Image("images/381599_error_icon.png")));
+               branchServers.getChildren().add(treeItem);
+           }
+       }
     }
 
     @FXML
@@ -112,20 +124,19 @@ public class ModbusMainController implements Initializable {
             if(parent != null){
                 if (parent.getValue().equals(" Servers")){
                     String ipAndPort = item.getValue().trim();
-                    String portString = ipAndPort.substring(ipAndPort.lastIndexOf(":") + 1);
+                    String portString = ipAndPort.substring(ipAndPort.lastIndexOf(":") + 1).trim();
                     int port = Integer.valueOf(portString);
                     ModbusSlave newSelectedSlave = modbusMainModel.getSlave(port);
                     if (newSelectedSlave != null){
                         modbusMainModel.setSelectedSlave(newSelectedSlave);
-                        showModbusSlaveTabPane();
-                        bindSelectedSlave();
+                        showSelectedSlave();
                     }
                 }
             }
         }
     }
 
-    private void showModbusSlaveTabPane() {
+    public void showSelectedSlave(){
         Parent root = null;
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/modbus/ModbusSlaveTabPane.fxml"));
@@ -136,7 +147,34 @@ public class ModbusMainController implements Initializable {
         }
         if (root != null) {
             ModbusMain.setCenter(root);
+            updateSelectedSlaveFowPane();
+            modbusMainModel.getSelectedSlave().isRunning().addListener(new javafx.beans.value.ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                    updateSelectedSlaveFowPane();
+                }
+            });
+            selectedSlaveFlowPane.setVisible(true);
+        }
+        updateSelectedSlaveFowPane();
+    }
 
+    public void updateSelectedSlaveFowPane(){
+        if(modbusMainModel.getSelectedSlave() != null) {
+            ipAddressLabel.setText(modbusMainModel.getSelectedSlave().getIpAddress());
+            portNumberLabel.setText(String.valueOf(modbusMainModel.getSelectedSlave().getPort()));
+            boolean isRunning = modbusMainModel.getSelectedSlave().isRunning().getValue();
+            if (isRunning) {
+                connectionStatusLabel.setText("Connected");
+                connectionStatusLabel.setStyle("-fx-text-fill: green");
+            } else {
+                connectionStatusLabel.setText("Not Connected");
+                connectionStatusLabel.setStyle("-fx-text-fill: red");
+            }
+            selectedSlaveFlowPane.setVisible(true);
+        } else{
+            selectedSlaveFlowPane.setVisible(false);
+            ModbusMain.setCenter(null);
         }
     }
 
@@ -153,13 +191,14 @@ public class ModbusMainController implements Initializable {
         rootItem.getChildren().addAll(branchServers, branchClients);
 
         treeView.setRoot(rootItem);
-        updateBranchServers();
     }
+
 
     private void setUpContextMenus() {
         setUpAddDeviceContextMenu();
         setUpRemoveDeviceContextMenu();
     }
+
 
     private void setUpRemoveDeviceContextMenu(){
         ContextMenu removeDeviceContextMenu = new ContextMenu();
@@ -187,15 +226,10 @@ public class ModbusMainController implements Initializable {
             Scene scene = new Scene(root, 300, 150);
             Stage stage = new Stage();
             stage.setScene(scene);
-            stage.setOnHiding(new EventHandler<WindowEvent>() {
-                @Override
-                public void handle(WindowEvent windowEvent) {
-                    hideModbusSlaveTabPane();
-                }
-            });
-            stage.show();
         });
     }
+
+
     private void setUpAddDeviceContextMenu() {
         ContextMenu addDeviceContextMenu = new ContextMenu();
         MenuItem addClient = new MenuItem("Add Client");
@@ -220,18 +254,7 @@ public class ModbusMainController implements Initializable {
             scene.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
             Stage stage = new Stage();
             stage.setScene(scene);
-            stage.setOnHiding(new EventHandler<WindowEvent>() {
-                @Override
-                public void handle(WindowEvent windowEvent) {
-
-                    updateBranchServers();
-                }
-            });
             stage.show();
         });
-    }
-
-    private void bindSelectedSlave() {
-        connectionStatusLabel.textProperty().bind(modbusMainModel.getSelectedSlave().runningAsStringProperty());
     }
 }

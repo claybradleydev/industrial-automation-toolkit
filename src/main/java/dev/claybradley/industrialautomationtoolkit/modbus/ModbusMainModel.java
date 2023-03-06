@@ -3,20 +3,25 @@ package dev.claybradley.industrialautomationtoolkit.modbus;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ServiceRequestHandlerIml;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.ModbusSlaveTabPaneModel;
+import javafx.beans.Observable;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 @Component
 public class ModbusMainModel {
 
-    private final ArrayList<ModbusSlave> slaves;
+    private final ObservableList<ModbusSlave> slaves;
 
     private ModbusSlave selectedSlave;
 
 
     public ModbusMainModel(){
 
-        slaves = new ArrayList<>();
+        this.slaves = FXCollections.observableArrayList(p -> new Observable[]{p.isRunning()});
 
         ModbusSlave newModbusSlave = addSlave("192.168.1.16", 5020);
 
@@ -45,14 +50,19 @@ public class ModbusMainModel {
         return null;
     }
 
-    public ArrayList<ModbusSlave> getSlaves() {
+    public ObservableList<ModbusSlave> getSlaves() {
         return slaves;
     }
 
-    public void setSelectedSlave(ModbusSlave selectedSlave) {
-        this.selectedSlave = selectedSlave;
+    public ModbusMainModel(ObservableList<ModbusSlave> slaves) {
+        this.slaves = slaves;
     }
 
+    public void setSelectedSlave(ModbusSlave selectedSlave) {
+
+        this.selectedSlave = selectedSlave;
+
+    }
     public ModbusSlave getSelectedSlave() {
         return selectedSlave;
     }

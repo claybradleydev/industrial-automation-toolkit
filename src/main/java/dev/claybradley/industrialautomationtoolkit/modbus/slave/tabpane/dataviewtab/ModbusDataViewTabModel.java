@@ -1,15 +1,25 @@
 package dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.dataviewtab;
 
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ModbusDataViewTabModel {
+
+    private ModbusSlave modbusSlave;
     private int address;
     private int quantity;
     private int unitId;
     private int functionCode;
-    private ModbusSlave modbusSlave;
+
+    private ObservableList<StringProperty> dataValues;
 
     public ModbusDataViewTabModel(ModbusSlave modbusSlave) {
         this.address = 0;
@@ -17,59 +27,62 @@ public class ModbusDataViewTabModel {
         this.unitId = 0;
         this.functionCode = 3;
         this.modbusSlave = modbusSlave;
+        this.dataValues = FXCollections.observableArrayList();
+
     }
 
-    public ArrayList<String> pollSlave(){
-        ArrayList<String> values = new ArrayList<>();
+    public void startPolling(){
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                pollSlave();
+            }
+        }, 0, 500);
+    }
+
+    public void pollSlave(){
+        ObservableList<StringProperty> values = FXCollections.observableArrayList();
 
         if (modbusSlave == null){
-            return null;
+            return;
         }
 
-        switch(functionCode){
+        switch(functionCode) {
             case 1:
                 boolean[] coils = modbusSlave.getRequestHandler().getModbusSlaveMemory().getCoils(address, quantity);
-                for(int i = 0; i <  quantity; ++i){
-                    String value ="Address: " + (address + i)  + " Value: " + coils[address + i];
+                for (int i = 0; i < quantity; ++i) {
+                    StringProperty value = new SimpleStringProperty((address + i) + " <" + coils[i] + ">");
                     values.add(value);
                 }
                 break;
             case 2:
                 boolean[] discreteInputs = modbusSlave.getRequestHandler().getModbusSlaveMemory().getDiscreteInputs(address, quantity);
-                for(int i = 0; i <  quantity; ++i){
-                    String value ="Address: " + (address + i)  + " Value: " + discreteInputs[address + i];
+                for (int i = 0; i < quantity; ++i) {
+                    StringProperty value = new SimpleStringProperty((address + i) + " <" + discreteInputs[i] + ">");
                     values.add(value);
                 }
                 break;
             case 3:
                 int[] holdingRegisters = modbusSlave.getRequestHandler().getModbusSlaveMemory().getHoldingRegisters(address, quantity);
-                for(int i = 0; i <  quantity; ++i){
-                    String value ="Address: " + (address + i)  + " Value: " + holdingRegisters[address + i];
+                for (int i = 0; i < quantity; ++i) {
+                    StringProperty value = new SimpleStringProperty((address + i) + " <" + holdingRegisters[i] + ">");
                     values.add(value);
                 }
                 break;
             case 4:
                 int[] inputRegisters = modbusSlave.getRequestHandler().getModbusSlaveMemory().getInputRegisters(address, quantity);
-                for(int i = 0; i <  quantity; ++i){
-                    String value ="Address: " + (address + i)  + " Value: " + inputRegisters[address + i];
+                for (int i = 0; i < quantity; ++i) {
+                    StringProperty value = new SimpleStringProperty((address + i) + "     <" + inputRegisters[i] + ">");
                     values.add(value);
                 }
                 break;
-
-            default:
-
-                return values;
         }
 
-        int [] holdingRegisters = modbusSlave.getRequestHandler().getModbusSlaveMemory().getHoldingRegisters();
-
-        for(int i = 0; i <  quantity; ++i){
-            String value ="Address: " + (address + i)  + " Value: " + holdingRegisters[address + i];
-            values.add(value);
-        }
-
-        return values;
+        dataValues.clear();
+        dataValues.setAll(values);
     }
+
     public int getAddress() {
         return address;
     }
@@ -100,5 +113,9 @@ public class ModbusDataViewTabModel {
 
     public void setFunctionCode(int functionCode) {
         this.functionCode = functionCode;
+    }
+
+    public ObservableList getDataValues() {
+        return dataValues;
     }
 }

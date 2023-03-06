@@ -3,6 +3,7 @@ package dev.claybradley.industrialautomationtoolkit.modbus.popups;
 import dev.claybradley.industrialautomationtoolkit.modbus.ModbusMainModel;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.ModbusSlaveTabPaneModel;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -42,7 +43,7 @@ public class RemoveSlavePopupController implements Initializable {
     }
 
     public void updateRemoveSlavePortNumChoiceBox(){
-        ArrayList<ModbusSlave> slaves = modbusMainModel.getSlaves();
+        ObservableList<ModbusSlave> slaves = modbusMainModel.getSlaves();
         removeSlavePortNumChoiceBox.getItems().clear();
         for(ModbusSlave modbusSlave: slaves){
             String portNumber = String.valueOf(modbusSlave.getPort());
