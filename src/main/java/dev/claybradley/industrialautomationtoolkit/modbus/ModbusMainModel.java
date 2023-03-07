@@ -30,7 +30,6 @@ public class ModbusMainModel {
     public ModbusSlave addSlave(String ipAddress, int port){
         ModbusSlave modbusSlave = new ModbusSlave(ipAddress, port);
         slaves.add(modbusSlave);
-        selectedSlave = modbusSlave;
         return modbusSlave;
     }
 

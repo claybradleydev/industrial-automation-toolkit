@@ -14,7 +14,7 @@
    <left>
       <VBox style="-fx-border-color: #3D3C3D #3D3C3D; -fx-border-width: 1; -fx-background-color: #212121;" BorderPane.alignment="CENTER">
          <children>
-            <HBox fx:id="addRemoveRefreshHBox" alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" spacing="10.0" style="-fx-background-color: #212121;">
+            <HBox fx:id="addRemoveRefreshHBox" alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" spacing="10.0" style="-fx-background-color: #212121; -fx-border-width: 1; -fx-border-color: #3D3C3D;">
                <children>
                   <Label fx:id="addDeviceLabel" text="+" textFill="WHITE">
                      <font>
@@ -49,7 +49,7 @@
       </VBox>
    </left>
    <top>
-      <FlowPane fx:id="selectedSlaveFlowPane" alignment="CENTER" style="-fx-background-color: #212121; -fx-border-color: #3D3C3D #3D3C3D #3D3C3D #3D3C3D; -fx-border-width: 1;" BorderPane.alignment="CENTER">
+      <FlowPane fx:id="selectedSlaveFlowPane" alignment="CENTER" style="-fx-background-color: transparent; -fx-border-color: #3D3C3D #3D3C3D #3D3C3D #3D3C3D; -fx-border-width: 0;" BorderPane.alignment="CENTER">
          <children>
             <Label style="-fx-text-fill: #B3B3B3;" text="Modbus Server">
                <font>

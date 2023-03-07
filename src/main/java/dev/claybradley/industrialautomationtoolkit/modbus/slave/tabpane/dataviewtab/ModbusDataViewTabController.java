@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -67,14 +68,14 @@ public class ModbusDataViewTabController implements Initializable {
 
         initializeFunctionCodeChoiceBox();
 
-        modbusDataViewTabModel.startPolling();
-
-        modbusDataViewTabModel.getDataValues().addListener(new ListChangeListener() {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
             @Override
-            public void onChanged(Change change) {
+            public void run() {
                 updateAddressLabelFlowPane();
             }
-        });
+        }, 0, 500);
+
     }
 
 
@@ -83,11 +84,9 @@ public class ModbusDataViewTabController implements Initializable {
             @Override
             public void run() {
                 addressValueFlowPane.getChildren().clear();
-                ObservableList<StringProperty> dataValues = modbusDataViewTabModel.getDataValues();
-                Iterator<StringProperty> iterator = dataValues.iterator();
-                while(iterator.hasNext()) {
-                    Label label = new Label(iterator.next().getValue());
-                    label.setStyle("-fx-pref-width: 100;");
+                ArrayList<String> values = modbusDataViewTabModel.pollSlave();
+                for(String value: values){
+                    Label label = new Label(value);
                     addressValueFlowPane.getChildren().add(label);
                 }
             }

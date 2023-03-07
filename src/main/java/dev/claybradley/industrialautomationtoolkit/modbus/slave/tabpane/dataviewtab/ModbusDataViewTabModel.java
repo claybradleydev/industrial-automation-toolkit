@@ -1,86 +1,66 @@
 package dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.dataviewtab;
 
+import dev.claybradley.industrialautomationtoolkit.modbus.displayformat.ModbusDataFormat;
+import dev.claybradley.industrialautomationtoolkit.modbus.displayformat.ModbusDataFormatter;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class ModbusDataViewTabModel {
 
     private ModbusSlave modbusSlave;
+    private ModbusDataFormat modbusDataFormat;
     private int address;
     private int quantity;
     private int unitId;
     private int functionCode;
-
-    private ObservableList<StringProperty> dataValues;
 
     public ModbusDataViewTabModel(ModbusSlave modbusSlave) {
         this.address = 0;
         this.quantity = 100;
         this.unitId = 0;
         this.functionCode = 3;
+        this.modbusDataFormat = ModbusDataFormat.HEX;
         this.modbusSlave = modbusSlave;
-        this.dataValues = FXCollections.observableArrayList();
-
     }
 
-    public void startPolling(){
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                pollSlave();
-            }
-        }, 0, 500);
-    }
+    public ArrayList<String> pollSlave(){
 
-    public void pollSlave(){
-        ObservableList<StringProperty> values = FXCollections.observableArrayList();
+       ArrayList<String> dataValues = new ArrayList<>();
 
         if (modbusSlave == null){
-            return;
+            return dataValues;
         }
 
         switch(functionCode) {
             case 1:
                 boolean[] coils = modbusSlave.getRequestHandler().getModbusSlaveMemory().getCoils(address, quantity);
                 for (int i = 0; i < quantity; ++i) {
-                    StringProperty value = new SimpleStringProperty((address + i) + " <" + coils[i] + ">");
-                    values.add(value);
+                    String value = (address + i) + " <" + coils[i] + ">";
+                    dataValues.add(value);
                 }
                 break;
             case 2:
                 boolean[] discreteInputs = modbusSlave.getRequestHandler().getModbusSlaveMemory().getDiscreteInputs(address, quantity);
                 for (int i = 0; i < quantity; ++i) {
-                    StringProperty value = new SimpleStringProperty((address + i) + " <" + discreteInputs[i] + ">");
-                    values.add(value);
+                    String value = (address + i) + " <" + discreteInputs[i] + ">";
+                    dataValues.add(value);
                 }
                 break;
             case 3:
                 int[] holdingRegisters = modbusSlave.getRequestHandler().getModbusSlaveMemory().getHoldingRegisters(address, quantity);
-                for (int i = 0; i < quantity; ++i) {
-                    StringProperty value = new SimpleStringProperty((address + i) + " <" + holdingRegisters[i] + ">");
-                    values.add(value);
-                }
+                ArrayList<String> formattedRegisters = ModbusDataFormatter.formatData(holdingRegisters, modbusDataFormat);
+                dataValues.addAll(formattedRegisters);
                 break;
             case 4:
                 int[] inputRegisters = modbusSlave.getRequestHandler().getModbusSlaveMemory().getInputRegisters(address, quantity);
-                for (int i = 0; i < quantity; ++i) {
-                    StringProperty value = new SimpleStringProperty((address + i) + "     <" + inputRegisters[i] + ">");
-                    values.add(value);
-                }
+                ArrayList<String> formattedInputRegisters = ModbusDataFormatter.formatData(inputRegisters, modbusDataFormat);
+                dataValues.addAll(formattedInputRegisters);
                 break;
         }
 
-        dataValues.clear();
-        dataValues.setAll(values);
+        return dataValues;
     }
 
     public int getAddress() {
@@ -115,7 +95,4 @@ public class ModbusDataViewTabModel {
         this.functionCode = functionCode;
     }
 
-    public ObservableList getDataValues() {
-        return dataValues;
-    }
 }

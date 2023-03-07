@@ -65,10 +65,6 @@ public class ModbusMainController implements Initializable {
     private Label addDeviceLabel;
     @FXML
     private Label removeDeviceLabel;
-
-    @FXML
-    private ChoiceBox removeSlavePortNumChoiceBox;
-
     @FXML
     private TreeView treeView;
 
@@ -81,23 +77,18 @@ public class ModbusMainController implements Initializable {
 
         this.timer = new Timer();
 
-        bindServersTreeBranch();
+        bindServersList();
 
-        if(modbusMainModel.getSelectedSlave() != null){
-            showSelectedSlave();
-        } else {
-            selectedSlaveFlowPane.setVisible(false);
-        }
-
+        updateSelectedSlave();
     }
 
-
-    public void bindServersTreeBranch(){
+    public void bindServersList(){
         updateServersTreeBranch();
         modbusMainModel.getSlaves().addListener(new ListChangeListener<ModbusSlave>() {
             @Override
             public void onChanged(Change<? extends ModbusSlave> change) {
                 updateServersTreeBranch();
+                updateSelectedSlave();
             }
         });
     }
@@ -108,6 +99,7 @@ public class ModbusMainController implements Initializable {
        for(ModbusSlave slave: slaves){
            if(slave.isRunning().get()){
            TreeItem treeItem = new TreeItem<>(" Localhost : " + slave.getPort(), new ImageView(new Image("images/PlcPng.png")));
+
            branchServers.getChildren().add(treeItem);
            } else{
                TreeItem treeItem = new TreeItem<>(" Localhost : " + slave.getPort(), new ImageView(new Image("images/381599_error_icon.png")));
@@ -129,7 +121,7 @@ public class ModbusMainController implements Initializable {
                     ModbusSlave newSelectedSlave = modbusMainModel.getSlave(port);
                     if (newSelectedSlave != null){
                         modbusMainModel.setSelectedSlave(newSelectedSlave);
-                        showSelectedSlave();
+                        updateSelectedSlave();
                     }
                 }
             }
@@ -147,19 +139,11 @@ public class ModbusMainController implements Initializable {
         }
         if (root != null) {
             ModbusMain.setCenter(root);
-            updateSelectedSlaveFowPane();
-            modbusMainModel.getSelectedSlave().isRunning().addListener(new javafx.beans.value.ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                    updateSelectedSlaveFowPane();
-                }
-            });
-            selectedSlaveFlowPane.setVisible(true);
         }
-        updateSelectedSlaveFowPane();
+        selectedSlaveFlowPane.setVisible(true);
     }
 
-    public void updateSelectedSlaveFowPane(){
+    public void updateSelectedSlave(){
         if(modbusMainModel.getSelectedSlave() != null) {
             ipAddressLabel.setText(modbusMainModel.getSelectedSlave().getIpAddress());
             portNumberLabel.setText(String.valueOf(modbusMainModel.getSelectedSlave().getPort()));
@@ -171,15 +155,11 @@ public class ModbusMainController implements Initializable {
                 connectionStatusLabel.setText("Not Connected");
                 connectionStatusLabel.setStyle("-fx-text-fill: red");
             }
-            selectedSlaveFlowPane.setVisible(true);
+            showSelectedSlave();
         } else{
             selectedSlaveFlowPane.setVisible(false);
             ModbusMain.setCenter(null);
         }
-    }
-
-    private void hideModbusSlaveTabPane(){
-        ModbusMain.setCenter(null);
     }
 
     public void buildTreeView(){
@@ -215,6 +195,7 @@ public class ModbusMainController implements Initializable {
         });
 
         removeServer.setOnAction(e -> {
+            System.out.println("Remove Server");
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/modbus/popups/RemoveSlavePopup.fxml"));
             fxmlLoader.setControllerFactory(applicationContext::getBean);
             Parent root = null;
@@ -226,6 +207,7 @@ public class ModbusMainController implements Initializable {
             Scene scene = new Scene(root, 300, 150);
             Stage stage = new Stage();
             stage.setScene(scene);
+            stage.show();
         });
     }
 
