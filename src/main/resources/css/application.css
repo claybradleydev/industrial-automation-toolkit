@@ -19,7 +19,6 @@
 
 .tab-label{
     -fx-text-fill: #B3B3B3;
-    -fx-cursor: hand;
 }
 
 .tab-header-background {
@@ -65,7 +64,6 @@
 .menu-item{
     -fx-background-color: black;
     -fx-text-fill: #B3B3B3;
-    -fx-cursor: hand;
 }
 
 .context-menu{
@@ -84,5 +82,4 @@
     -fx-text-fill: #B3B3B3;
     -fx-background-color: #212121;
     -fx-border-color: #3D3C3D;
-    -fx-cursor: hand;
 }

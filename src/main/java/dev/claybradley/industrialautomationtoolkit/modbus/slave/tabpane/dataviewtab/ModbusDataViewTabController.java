@@ -1,18 +1,15 @@
 package dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.dataviewtab;
 
 import dev.claybradley.industrialautomationtoolkit.modbus.ModbusMainModel;
+import dev.claybradley.industrialautomationtoolkit.modbus.ModbusMemoryArea;
+import dev.claybradley.industrialautomationtoolkit.modbus.displayformat.ModbusDataFormat;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
 import javafx.application.Platform;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +28,10 @@ public class ModbusDataViewTabController implements Initializable {
     private ModbusDataViewTabModel modbusDataViewTabModel;
 
     private Timer timer;
-
     @FXML
-    private ChoiceBox functionChoiceBox;
+    private ChoiceBox memoryAreaChoiceBox;
+    @FXML
+    private ChoiceBox dataFormatChoiceBox;
     @FXML
     private TextField addressTextField;
     @FXML
@@ -67,7 +65,7 @@ public class ModbusDataViewTabController implements Initializable {
         });
 
         initializeFunctionCodeChoiceBox();
-
+        initializeDataFormatChoiceBox();
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -84,11 +82,7 @@ public class ModbusDataViewTabController implements Initializable {
             @Override
             public void run() {
                 addressValueFlowPane.getChildren().clear();
-                ArrayList<String> values = modbusDataViewTabModel.pollSlave();
-                for(String value: values){
-                    Label label = new Label(value);
-                    addressValueFlowPane.getChildren().add(label);
-                }
+                addressValueFlowPane.getChildren().addAll(modbusDataViewTabModel.pollSlave());
             }
         };
 
@@ -96,21 +90,62 @@ public class ModbusDataViewTabController implements Initializable {
     }
 
     public void initializeFunctionCodeChoiceBox(){
-        String readCoilsLabel = "Read Coils";
-        String readDiscreteInputsLabel = "Read Discrete Inputs";
-        String readHoldingRegistersLabel = "Read Holding Registers";
-        String readInputRegistersLabel = "Read Input Registers";
+        String readCoilsLabel = "Coils";
+        String readDiscreteInputsLabel = "Discrete Inputs";
+        String readHoldingRegistersLabel = "Holding Registers";
+        String readInputRegistersLabel = "Input Registers";
 
-        functionChoiceBox.getItems().addAll(readCoilsLabel, readDiscreteInputsLabel, readHoldingRegistersLabel, readInputRegistersLabel);
-        functionChoiceBox.getSelectionModel().select(modbusDataViewTabModel.getFunctionCode() - 1);
+        memoryAreaChoiceBox.getItems().addAll(readCoilsLabel, readDiscreteInputsLabel, readHoldingRegistersLabel, readInputRegistersLabel);
+        memoryAreaChoiceBox.getSelectionModel().select(modbusDataViewTabModel.getModbusMemoryArea().getArea());
 
-        functionChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+        memoryAreaChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                modbusDataViewTabModel.setFunctionCode(number2.intValue() + 1);
+                Optional<ModbusMemoryArea> optionalModbusMemoryArea = ModbusMemoryArea.fromArea(number2.intValue());
+                if(optionalModbusMemoryArea.isPresent()){
+                    modbusDataViewTabModel.setModbusMemoryArea(optionalModbusMemoryArea.get());
+                }
+
             }
         });
     }
+
+    public void initializeDataFormatChoiceBox(){
+        String binaryLabel = "Binary";
+        String decimalLabel = "Decimal";
+        String hexLabel = "Hex";
+        String longLabel = "Long";
+        String longSwappedLabel = "Long Swapped";
+        String floatLabel = "Float";
+        String floatSwappedLabel = "Float Swapped";
+        String float64BitLabel = "Float 64 Bit";
+        String swapped64BitLabel = "Swapped 64 Bit";
+
+        dataFormatChoiceBox.getItems().addAll(
+                binaryLabel,
+                decimalLabel,
+                hexLabel,
+                longLabel,
+                longSwappedLabel,
+                floatLabel,
+                floatSwappedLabel,
+                float64BitLabel,
+                swapped64BitLabel
+                );
+
+        dataFormatChoiceBox.getSelectionModel().select(modbusDataViewTabModel.getModbusDataFormat().ordinal());
+
+        dataFormatChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                Optional<ModbusDataFormat> optionalModbusDataFormat = ModbusDataFormat.fromFormat(dataFormatChoiceBox.getSelectionModel().getSelectedIndex());
+                if(optionalModbusDataFormat.isPresent()){
+                    modbusDataViewTabModel.setModbusDataFormat(optionalModbusDataFormat.get());
+                }
+
+            }
+        });}
 
 }

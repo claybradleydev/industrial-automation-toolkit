@@ -10,7 +10,7 @@
 
 <BorderPane fx:id="rootbp" prefHeight="351.0" prefWidth="548.0" style="-fx-background-color: #181818;" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.claybradley.industrialautomationtoolkit.main.MainController">
    <left>
-      <VBox fx:id="sidenavvbox" alignment="TOP_CENTER" style="-fx-background-color: #181818;" BorderPane.alignment="CENTER">
+      <VBox fx:id="sidenavvbox" alignment="TOP_CENTER" style="-fx-background-color: #212121#212121;" BorderPane.alignment="CENTER">
          <children>
             <Label lineSpacing="3.0" prefHeight="90.0" prefWidth="110.0" text="Industrial Automation Toolkit" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                <font>
@@ -75,7 +75,4 @@
          </padding>
       </VBox>
    </center>
-   <padding>
-      <Insets bottom="20.0" right="20.0" />
-   </padding>
 </BorderPane>

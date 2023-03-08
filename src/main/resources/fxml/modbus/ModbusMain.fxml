@@ -107,4 +107,7 @@
          </padding>
       </FlowPane>
    </top>
+   <padding>
+      <Insets right="20.0" />
+   </padding>
 </BorderPane>

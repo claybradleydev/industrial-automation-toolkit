@@ -3,8 +3,10 @@ package dev.claybradley.industrialautomationtoolkit.main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -12,11 +14,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 @Component
 @Scope("prototype")
-public class MainController {
+public class MainController implements Initializable {
     @Autowired
     ApplicationContext applicationContext;
     @FXML
@@ -30,7 +34,7 @@ public class MainController {
     }
     @FXML
     private void navhome(ActionEvent actionEvent) {
-        rootbp.setCenter(bodyvbox);
+        loadPage("home");
     }
     @FXML
     private void navmodbus(ActionEvent actionEvent) {
@@ -54,6 +58,13 @@ public class MainController {
         } catch (IOException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        rootbp.setCenter(root);
+        bodyvbox.getChildren().clear();
+        VBox.setVgrow(root, Priority.ALWAYS);
+        bodyvbox.getChildren().add(root);
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        loadPage("home");
     }
 }
