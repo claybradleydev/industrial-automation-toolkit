@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.springframework.stereotype.Component;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -21,17 +22,17 @@ public class ModbusMainModel {
     private ModbusSlave selectedSlave;
 
 
-    public ModbusMainModel() throws ExecutionException, InterruptedException {
+    public ModbusMainModel() throws ExecutionException, InterruptedException, UnknownHostException {
 
         this.slaves = FXCollections.observableArrayList(p -> new Observable[]{p.isRunning()});
 
-        ModbusSlave newModbusSlave = addSlave("192.168.1.9", 5020);
+        ModbusSlave newModbusSlave = addSlave(5020);
         newModbusSlave.start();
         newModbusSlave.getRequestHandler().getModbusSlaveMemory().setHoldingRegister(0, (short) 199);
     }
 
-    public ModbusSlave addSlave(String ipAddress, int port){
-        ModbusSlave modbusSlave = new ModbusSlave(ipAddress, port);
+    public ModbusSlave addSlave(int port) throws UnknownHostException {
+        ModbusSlave modbusSlave = new ModbusSlave(port);
         slaves.add(modbusSlave);
         return modbusSlave;
     }

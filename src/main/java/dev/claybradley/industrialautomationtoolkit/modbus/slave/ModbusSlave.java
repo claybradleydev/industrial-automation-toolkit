@@ -6,23 +6,35 @@ import dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.ModbusSl
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
+import java.net.*;
+import java.util.Enumeration;
 import java.util.concurrent.ExecutionException;
 
 public class ModbusSlave {
     private final ModbusTcpSlave modbusTcpSlave;
     private final ServiceRequestHandlerIml requestHandler;
     private final ModbusSlaveTabPaneModel modbusSlaveTabPaneModel;
-    private final String ipAddress;
+    private String ipAddress;
     private final int port;
     private BooleanProperty running;
 
 
-    public ModbusSlave(String ipAddress, int port) {
+    public ModbusSlave(int port) throws UnknownHostException {
         this.modbusSlaveTabPaneModel = new ModbusSlaveTabPaneModel(this);
         this.requestHandler = new ServiceRequestHandlerIml();
         ModbusTcpSlaveConfig config = new ModbusTcpSlaveConfig.Builder().build();
         this.modbusTcpSlave = new ModbusTcpSlave(config);
-        this.ipAddress = ipAddress;
+        try {
+            Enumeration<NetworkInterface> networkInterfaceEnumeration = NetworkInterface.getNetworkInterfaces();
+            while( networkInterfaceEnumeration.hasMoreElements()){
+                for ( InterfaceAddress interfaceAddress : networkInterfaceEnumeration.nextElement().getInterfaceAddresses())
+                    if ( interfaceAddress.getAddress().isSiteLocalAddress())
+                        this.ipAddress = interfaceAddress.getAddress().getHostAddress();
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+
         this.port = port;
         this.running = new SimpleBooleanProperty(false);
     }

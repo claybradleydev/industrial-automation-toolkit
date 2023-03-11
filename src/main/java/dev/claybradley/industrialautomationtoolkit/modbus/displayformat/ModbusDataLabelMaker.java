@@ -147,10 +147,9 @@ public class ModbusDataLabelMaker {
         label.setMaxWidth(9999);
         label.setMinWidth(Region.USE_COMPUTED_SIZE);
         label.setAlignment(Pos.CENTER);
+        label.setStyle("-fx-font-family: monospace; -fx-font-size: 14; -fx-text-fill: white");
         HBox.setHgrow(label, Priority.ALWAYS);
         return label;
     }
-
-
 
 }

@@ -7,6 +7,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import org.apache.commons.lang3.StringUtils;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class ModbusAddressLabelMaker {
@@ -49,21 +50,34 @@ public class ModbusAddressLabelMaker {
     }
 
     private String getFormattedAddressValue(int address, ModbusMemoryArea modbusMemoryArea, ModbusAddressFormat modbusAddressFormat){
-        int addressValue = address + getModbusMemoryAreaAdder(modbusMemoryArea, modbusAddressFormat);
+
+        ModbusAddressFormat modbusAddressFormat1 = modbusAddressFormat;
+        if(address > 9999) {
+                if(modbusAddressFormat == ModbusAddressFormat.FIVE_DIGIT){
+                    modbusAddressFormat1 = ModbusAddressFormat.SIX_DIGIT;
+                } else if(modbusAddressFormat == ModbusAddressFormat.FIVE_DIGIT_HEX){
+                    modbusAddressFormat1 = ModbusAddressFormat.SIX_DIGIT_HEX;
+                }
+
+        }
+        int addressValue = address + getModbusMemoryAreaAdder(modbusMemoryArea, modbusAddressFormat1);
         String formattedAddress = "";
-        if(modbusAddressFormat == ModbusAddressFormat.FIVE_DIGIT || modbusAddressFormat == ModbusAddressFormat.SIX_DIGIT){
+        if(modbusAddressFormat1 == ModbusAddressFormat.FIVE_DIGIT || modbusAddressFormat1 == ModbusAddressFormat.SIX_DIGIT){
             String addressString = String.valueOf(addressValue);
             formattedAddress = addressString;
-        } else if (modbusAddressFormat == ModbusAddressFormat.FIVE_DIGIT_HEX || modbusAddressFormat == ModbusAddressFormat.SIX_DIGIT_HEX){
+        } else if (modbusAddressFormat1 == ModbusAddressFormat.FIVE_DIGIT_HEX || modbusAddressFormat1 == ModbusAddressFormat.SIX_DIGIT_HEX){
             String addressString = Integer.toHexString(addressValue);
             formattedAddress = addressString;
         }
-        if(modbusAddressFormat == ModbusAddressFormat.FIVE_DIGIT || modbusAddressFormat == ModbusAddressFormat.FIVE_DIGIT_HEX){
-            formattedAddress = StringUtils.leftPad(formattedAddress, 5, "0");
+
+        if(modbusMemoryArea == ModbusMemoryArea.COIL){
+            if(modbusAddressFormat1 == ModbusAddressFormat.FIVE_DIGIT)
+                formattedAddress = StringUtils.leftPad(formattedAddress, 5, "0");
+            else if(modbusAddressFormat1 == ModbusAddressFormat.SIX_DIGIT){
+                formattedAddress = StringUtils.leftPad(formattedAddress, 6, "0");
+            }
         }
-        if(modbusAddressFormat == ModbusAddressFormat.SIX_DIGIT || modbusAddressFormat == ModbusAddressFormat.SIX_DIGIT_HEX){
-            formattedAddress = StringUtils.leftPad(formattedAddress, 6, "0");
-        }
+
         return formattedAddress;
     }
 
@@ -109,6 +123,7 @@ public class ModbusAddressLabelMaker {
         Label label = new Label(addressValue + ":");
         label.setPrefWidth(75);
         label.setAlignment(Pos.BASELINE_RIGHT);
+        label.setStyle("-fx-font-family: monospace; -fx-font-size: 14");
         return label;
     }
 
@@ -117,9 +132,8 @@ public class ModbusAddressLabelMaker {
         vBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
         vBox.setMinWidth(Region.USE_COMPUTED_SIZE);
         vBox.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        vBox.setSpacing(10);
+        vBox.setSpacing(2);
         vBox.setAlignment(Pos.CENTER);
-        vBox.setSpacing(0);
         return vBox;
     }
 

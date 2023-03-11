@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
@@ -25,13 +26,13 @@ public class AddSlavePopupController implements Initializable {
     @FXML
     private TextField addSlavePortNumTextField;
     @FXML
-    private void clickAddSlave(ActionEvent actionEvent) throws ExecutionException, InterruptedException {
+    private void clickAddSlave(ActionEvent actionEvent) throws ExecutionException, InterruptedException, UnknownHostException {
         int portNumber = Integer.valueOf(addSlavePortNumTextField.getText());
         ModbusSlave existingModbusSlave = modbusMainModel.getSlave(portNumber);
         if(existingModbusSlave != null){
             return;
         }
-        ModbusSlave newModbusSlave = modbusMainModel.addSlave("192.168.1.16", portNumber);
+        ModbusSlave newModbusSlave = modbusMainModel.addSlave( portNumber);
         Stage stage = (Stage) AddServerPopup.getScene().getWindow();
         stage.close();
     }

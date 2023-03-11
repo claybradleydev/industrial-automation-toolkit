@@ -51,11 +51,33 @@ public class ModbusDataViewTabController implements Initializable {
         quantityTextField.setText(String.valueOf(modbusDataViewTabModel.getQuantity()));
 
         addressTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            modbusDataViewTabModel.setAddress(Integer.valueOf(newValue));
-        });
+            if(!observable.getValue().isEmpty()) {
+                try {
+                    int address = Integer.valueOf(newValue);
+                    if (requestIsValid(Integer.valueOf(newValue), modbusDataViewTabModel.getQuantity())) {
+                        modbusDataViewTabModel.setAddress(Integer.valueOf(newValue));
+                    } else {
+                        addressTextField.setText(oldValue);
+                    }
+                }catch(Exception e){
+                    addressTextField.setText(oldValue);
+                }
+            }
 
+        });
         quantityTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            modbusDataViewTabModel.setQuantity(Integer.valueOf(newValue));
+            if(!observable.getValue().isEmpty()) {
+                try {
+                    int quantity = Integer.valueOf(newValue);
+                    if (requestIsValid(modbusDataViewTabModel.getAddress(), Integer.valueOf(newValue))) {
+                        modbusDataViewTabModel.setQuantity(Integer.valueOf(newValue));
+                    } else {
+                        quantityTextField.setText(oldValue);
+                    }
+                } catch (Exception e) {
+                    quantityTextField.setText(oldValue);
+                }
+            }
         });
 
         initializeAddressFormatChoiceBox();
@@ -70,8 +92,22 @@ public class ModbusDataViewTabController implements Initializable {
             }
         }, 0, 500);
 
-        addressValueFlowPane.setHgap(20);
+        addressValueFlowPane.setHgap(50);
+        addressValueFlowPane.setVgap(10);
 
+    }
+
+    private boolean requestIsValid(int address, int quantity) {
+       if(address < 0){
+           return false;
+       }
+       if(quantity < 0 || quantity > 1000){
+           return false;
+       }
+       if(address + quantity >= 99999){
+           return false;
+       }
+       return true;
     }
 
     private void updateAddressLabelFlowPane() {

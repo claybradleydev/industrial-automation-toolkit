@@ -3,10 +3,10 @@ package dev.claybradley.industrialautomationtoolkit.modbus.slave;
 
 public class ModbusSlaveMemory {
 
-    private final boolean [] coils = new boolean[65535];
-    private final boolean [] discreteInputs = new boolean[65535];
-    private final short [] holdingRegisters = new short[65535];
-    private final short [] inputRegisters = new short[65535];
+    private final boolean [] coils = new boolean[99999];
+    private final boolean [] discreteInputs = new boolean[99999];
+    private final short [] holdingRegisters = new short[99999];
+    private final short [] inputRegisters = new short[99999];
 
     public short[] getHoldingRegisters(int address, int quantity){
         short[] requestedRegisters = new short[quantity];
