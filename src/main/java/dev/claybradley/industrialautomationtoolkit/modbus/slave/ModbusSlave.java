@@ -48,15 +48,6 @@ public class ModbusSlave {
     public BooleanProperty isRunning() {
         return running;
     }
-
-    public void setRunning(boolean running) {
-
-        this.running.setValue(running);
-    }
-
-    public ModbusTcpSlave getModbusTcpSlave() {
-        return modbusTcpSlave;
-    }
     public ServiceRequestHandlerIml getRequestHandler() {
         return requestHandler;
     }

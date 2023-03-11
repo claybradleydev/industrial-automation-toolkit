@@ -1,23 +1,17 @@
 package dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.configtab;
-
-import dev.claybradley.industrialautomationtoolkit.modbus.ModbusMainController;
 import dev.claybradley.industrialautomationtoolkit.modbus.ModbusMainModel;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;

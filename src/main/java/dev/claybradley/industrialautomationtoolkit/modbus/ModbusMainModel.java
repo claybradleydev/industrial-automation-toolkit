@@ -11,6 +11,8 @@ import javafx.collections.ObservableList;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+
 @Component
 public class ModbusMainModel {
 
@@ -19,12 +21,13 @@ public class ModbusMainModel {
     private ModbusSlave selectedSlave;
 
 
-    public ModbusMainModel(){
+    public ModbusMainModel() throws ExecutionException, InterruptedException {
 
         this.slaves = FXCollections.observableArrayList(p -> new Observable[]{p.isRunning()});
 
-        ModbusSlave newModbusSlave = addSlave("192.168.1.16", 5020);
-
+        ModbusSlave newModbusSlave = addSlave("192.168.1.9", 5020);
+        newModbusSlave.start();
+        newModbusSlave.getRequestHandler().getModbusSlaveMemory().setHoldingRegister(0, (short) 199);
     }
 
     public ModbusSlave addSlave(String ipAddress, int port){

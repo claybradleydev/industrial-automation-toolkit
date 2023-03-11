@@ -1,76 +1,156 @@
 package dev.claybradley.industrialautomationtoolkit.modbus.displayformat;
 
-import dev.claybradley.industrialautomationtoolkit.modbus.ModbusMemoryArea;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-
+import javafx.scene.layout.*;
 import java.util.ArrayList;
+
 
 public class ModbusDataLabelMaker {
 
-    public static ArrayList<HBox> getRegisterLabels(int[] data, int address, ModbusDataFormat modbusDataFormat, ModbusMemoryArea modbusMemoryArea){
-        switch (modbusDataFormat){
+    public ArrayList<Label> format(short[] data, ModbusDataFormat modbusDataFormat){
+        switch (modbusDataFormat) {
             case BINARY:
-                return formatBinary(data, address);
+                return formatBinary(data);
             case DECIMAL:
-                return formatDecimal(data, address);
+                return  formatDecimal(data);
             case HEX:
-                return formatHex(data, address, modbusMemoryArea);
+                return formatHex(data);
+            case LONG:
+                return formatLong(data);
+            case LONG_SWAPPED:
+                return formatLongSwapped(data);
+            case FLOAT:
+                return formatFloat(data);
+            case FLOAT_SWAPPED:
+                return formatFloatSwapped(data);
         }
         return null;
     }
 
-    public static ArrayList<HBox> getBooleanLabels(boolean[] data, int address){
-        ArrayList<HBox> dataList = new ArrayList<>();
-        for(boolean value: data){
-            HBox hBox = new HBox();
-            hBox.getChildren().add(new Label(String.valueOf(value)));
-            dataList.add(hBox);
+    public ArrayList<Label>  format(boolean[] data){
+        ArrayList<Label> dataList = new ArrayList<>();
+        boolean dataValue = false;
+        for(int i = 0; i < data.length; ++i) {
+
+            dataValue = data[i];
+            Label label = getValueLabel(String.valueOf(dataValue));
+
+            dataList.add(label);
         }
         return dataList;
     }
 
-    private static ArrayList<HBox>  formatBinary(int[] data, int address){
-        ArrayList<HBox> dataList = new ArrayList<>();
-        for(int value: data){
-            HBox hBox = new HBox();
-            hBox.getChildren().add(new Label(Integer.toBinaryString(value)));
-            dataList.add(hBox);
-        }
-        return dataList;
-    }
-
-    private static ArrayList<HBox>  formatDecimal(int[] data, int address){
-        ArrayList<HBox> dataList = new ArrayList<>();
-        for(int value: data){
-            HBox hBox = new HBox();
-            hBox.getChildren().add(new Label(String.valueOf(value)));
-            dataList.add(hBox);
-        }
-        return dataList;
-    }
-
-    private static ArrayList<HBox> formatHex(int[] data, int address, ModbusMemoryArea modbusMemoryArea){
-        ArrayList<HBox> dataList = new ArrayList<>();
-        int addressValue = 0;
+    public ArrayList<Label>  formatBinary(short[] data){
+        ArrayList<Label> dataList = new ArrayList<>();
         int dataValue = 0;
         for(int i = 0; i < data.length; ++i) {
-            if (modbusMemoryArea == ModbusMemoryArea.HOLDING_REGISTER) {
-                addressValue = 40000 + address + i;
-            } else{
-                addressValue = 30000 + address + i;
-            }
+
             dataValue = data[i];
-            Label addressLabel = new Label(String.valueOf(addressValue));
-            Label valueLabel = new Label(String.valueOf(dataValue));
-            HBox hBox = new HBox();
-            addressLabel.setPrefWidth(75);
-            valueLabel.setPrefWidth(75);
-            hBox.getChildren().addAll(addressLabel, valueLabel);
-            dataList.add(hBox);
+            Label label = getValueLabel(Integer.toBinaryString(dataValue));
+
+            dataList.add(label);
         }
         return dataList;
     }
+
+    public ArrayList<Label>  formatDecimal(short[] data){
+        ArrayList<Label> dataList = new ArrayList<>();
+        int dataValue = 0;
+        for(int i = 0; i < data.length; ++i) {
+
+            dataValue = data[i];
+            Label label = getValueLabel(String.valueOf(dataValue));
+
+            dataList.add(label);
+        }
+        return dataList;
+    }
+
+    public ArrayList<Label> formatHex(short[] data){
+        ArrayList<Label> dataList = new ArrayList<>();
+        int dataValue = 0;
+        for(int i = 0; i < data.length; ++i) {
+
+            dataValue = data[i];
+            Label label = getValueLabel(Integer.toHexString(dataValue));
+
+            dataList.add(label);
+        }
+        return dataList;
+    }
+
+    public ArrayList<Label> formatLong(short[] data){
+        ArrayList<Label> dataList = new ArrayList<>();
+
+        for(int i = 0; i < data.length; i = i + 2) {
+
+            short dataValue1 = data[i];
+            short dataValue2 = data[i + 1];
+            int resultDataValue = (int) (dataValue2 << 16) | (dataValue1 & 0xFFFF);
+            Label label = getValueLabel(String.valueOf(resultDataValue));
+
+            dataList.add(label);
+        }
+        return dataList;
+    }
+
+    public ArrayList<Label> formatLongSwapped(short[] data){
+        ArrayList<Label> dataList = new ArrayList<>();
+        for(int i = 0; i < data.length; i = i + 2) {
+            short dataValue1 = data[i];
+            short dataValue2 = data[i + 1];
+            int resultDataValue = (int) (dataValue1 << 16) | (dataValue2 & 0xFFFF);
+            Label label = getValueLabel(String.valueOf(resultDataValue));
+            dataList.add(label);
+        }
+        return dataList;
+    }
+
+    public ArrayList<Label> formatFloat(short[] data){
+        ArrayList<Label> dataList = new ArrayList<>();
+
+        for(int i = 0; i < data.length; i = i + 2) {
+
+            short dataValue1 = data[i];
+            short dataValue2 = data[i + 1];
+
+            int combinedValue = (int) (dataValue2 << 16) | dataValue1;
+            float resultDataValue = Float.intBitsToFloat(combinedValue);
+
+            Label label = getValueLabel(String.valueOf(resultDataValue));
+
+            dataList.add(label);
+        }
+        return dataList;
+    }
+
+    public ArrayList<Label> formatFloatSwapped(short[] data){
+        ArrayList<Label> dataList = new ArrayList<>();
+
+        for(int i = 0; i < data.length; i = i + 2) {
+
+            short dataValue1 = data[i];
+            short dataValue2 = data[i + 1];
+            int combinedValue = (int) (dataValue1 << 16) | dataValue2;
+            float resultDataValue = Float.intBitsToFloat(combinedValue);
+
+            Label valueLabel = getValueLabel(String.valueOf(resultDataValue));
+
+            dataList.add(valueLabel);
+        }
+        return dataList;
+    }
+
+    public Label getValueLabel(String value){
+        Label label = new Label(value);
+        label.setMaxWidth(9999);
+        label.setMinWidth(Region.USE_COMPUTED_SIZE);
+        label.setAlignment(Pos.CENTER);
+        HBox.setHgrow(label, Priority.ALWAYS);
+        return label;
+    }
+
 
 
 }

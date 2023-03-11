@@ -2,6 +2,7 @@ package dev.claybradley.industrialautomationtoolkit.modbus.slave.tabpane.datavie
 
 import dev.claybradley.industrialautomationtoolkit.modbus.ModbusMainModel;
 import dev.claybradley.industrialautomationtoolkit.modbus.ModbusMemoryArea;
+import dev.claybradley.industrialautomationtoolkit.modbus.displayformat.ModbusAddressFormat;
 import dev.claybradley.industrialautomationtoolkit.modbus.displayformat.ModbusDataFormat;
 import dev.claybradley.industrialautomationtoolkit.modbus.slave.ModbusSlave;
 import javafx.application.Platform;
@@ -21,13 +22,14 @@ import java.util.*;
 @Component
 @Scope("prototype")
 public class ModbusDataViewTabController implements Initializable {
-
     @Autowired
     ModbusMainModel modbusMainModel;
 
     private ModbusDataViewTabModel modbusDataViewTabModel;
 
     private Timer timer;
+    @FXML
+    private ChoiceBox addressFormatChoiceBox;
     @FXML
     private ChoiceBox memoryAreaChoiceBox;
     @FXML
@@ -37,10 +39,7 @@ public class ModbusDataViewTabController implements Initializable {
     @FXML
     private TextField quantityTextField;
     @FXML
-    private TextField unitIdTextField;
-    @FXML
     private FlowPane addressValueFlowPane;
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -48,13 +47,8 @@ public class ModbusDataViewTabController implements Initializable {
         ModbusSlave modbusSlave = modbusMainModel.getSelectedSlave();
         this.modbusDataViewTabModel = modbusMainModel.getSelectedSlave().getModbusSlaveTabPaneModel().getModbusDataViewTabModel();
 
-        unitIdTextField.setText(String.valueOf(modbusDataViewTabModel.getUnitId()));
         addressTextField.setText(String.valueOf(modbusDataViewTabModel.getAddress()));
         quantityTextField.setText(String.valueOf(modbusDataViewTabModel.getQuantity()));
-
-        unitIdTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            modbusDataViewTabModel.setUnitId(Integer.valueOf(newValue));
-        });
 
         addressTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             modbusDataViewTabModel.setAddress(Integer.valueOf(newValue));
@@ -64,8 +58,10 @@ public class ModbusDataViewTabController implements Initializable {
             modbusDataViewTabModel.setQuantity(Integer.valueOf(newValue));
         });
 
+        initializeAddressFormatChoiceBox();
         initializeFunctionCodeChoiceBox();
         initializeDataFormatChoiceBox();
+
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -74,8 +70,9 @@ public class ModbusDataViewTabController implements Initializable {
             }
         }, 0, 500);
 
-    }
+        addressValueFlowPane.setHgap(20);
 
+    }
 
     private void updateAddressLabelFlowPane() {
         Runnable runnable = new Runnable() {
@@ -111,6 +108,28 @@ public class ModbusDataViewTabController implements Initializable {
         });
     }
 
+    public void initializeAddressFormatChoiceBox(){
+        String fiveDigit = "Five Digit";
+        String sixDigit = "Six Digit";
+        String fiveDigitHex = "Five Digit Hex";
+        String sixDigitHex = "Six Digit Hex";
+
+        addressFormatChoiceBox.getItems().addAll(fiveDigit, sixDigit, fiveDigitHex, sixDigitHex);
+        addressFormatChoiceBox.getSelectionModel().select(modbusDataViewTabModel.getModbusAddressFormat().ordinal());
+
+        addressFormatChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                Optional<ModbusAddressFormat> optionalModbusAddressFormat = ModbusAddressFormat.fromFormat(number2.intValue());
+                if(optionalModbusAddressFormat.isPresent()){
+                    modbusDataViewTabModel.setModbusAddressFormat(optionalModbusAddressFormat.get());
+                }
+
+            }
+        });
+    }
+
     public void initializeDataFormatChoiceBox(){
         String binaryLabel = "Binary";
         String decimalLabel = "Decimal";
@@ -119,8 +138,6 @@ public class ModbusDataViewTabController implements Initializable {
         String longSwappedLabel = "Long Swapped";
         String floatLabel = "Float";
         String floatSwappedLabel = "Float Swapped";
-        String float64BitLabel = "Float 64 Bit";
-        String swapped64BitLabel = "Swapped 64 Bit";
 
         dataFormatChoiceBox.getItems().addAll(
                 binaryLabel,
@@ -129,9 +146,7 @@ public class ModbusDataViewTabController implements Initializable {
                 longLabel,
                 longSwappedLabel,
                 floatLabel,
-                floatSwappedLabel,
-                float64BitLabel,
-                swapped64BitLabel
+                floatSwappedLabel
                 );
 
         dataFormatChoiceBox.getSelectionModel().select(modbusDataViewTabModel.getModbusDataFormat().ordinal());
@@ -146,6 +161,7 @@ public class ModbusDataViewTabController implements Initializable {
                 }
 
             }
-        });}
+        });
+    }
 
 }

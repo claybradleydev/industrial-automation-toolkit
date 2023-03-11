@@ -25,7 +25,7 @@ public class ServiceRequestHandlerIml implements ServiceRequestHandler {
 
         ByteBuf registers = PooledByteBufAllocator.DEFAULT.buffer(quantity);
 
-        int [] holdingRegisters = modbusSlaveMemory.getHoldingRegisters(address, quantity);
+        short [] holdingRegisters = modbusSlaveMemory.getHoldingRegisters(address, quantity);
 
         for (int i = 0; i < quantity; ++i) {
             registers.writeShort(holdingRegisters[i]);
@@ -48,7 +48,7 @@ public class ServiceRequestHandlerIml implements ServiceRequestHandler {
 
         ByteBuf registers = PooledByteBufAllocator.DEFAULT.buffer(quantity);
 
-        int [] inputRegisters = modbusSlaveMemory.getInputRegisters(address, quantity);
+        short [] inputRegisters = modbusSlaveMemory.getInputRegisters(address, quantity);
 
         for (int i = address; i < quantity; i++) {
             registers.writeShort(inputRegisters[i]);
@@ -111,11 +111,38 @@ public class ServiceRequestHandlerIml implements ServiceRequestHandler {
         WriteSingleRegisterRequest request = service.getRequest();
 
         int address = request.getAddress();
-        int value = request.getValue();
+        short value = (short) request.getValue();
 
         modbusSlaveMemory.setHoldingRegister(address, value);
         service.sendResponse(new WriteSingleRegisterResponse(address, value));
 
+        ReferenceCountUtil.release(request);
+    }
+
+    @Override
+    public void onWriteMultipleRegisters(ServiceRequest<WriteMultipleRegistersRequest, WriteMultipleRegistersResponse> service) {
+        String clientRemoteAddress = service.getChannel().remoteAddress().toString();
+        String clientIp = clientRemoteAddress.replaceAll(".*/(.*):.*", "$1");
+        String clientPort = clientRemoteAddress.replaceAll(".*:(.*)", "$1");
+        WriteMultipleRegistersRequest request = service.getRequest();
+
+        int address = request.getAddress();
+        ByteBuf byteBuf = request.getValues();
+        short[] values;
+        if(byteBuf.readableBytes() % 2 != 0) {
+            throw new IllegalArgumentException();
+        }
+        values = new short[byteBuf.readableBytes() / 2];
+        if (byteBuf.nioBufferCount() > 0 ){
+            byteBuf.nioBuffer().asShortBuffer().get(values);
+        } else {
+            for(int i = 0; i < values.length; i++) {
+                values[i] = byteBuf.readShort();
+            }
+        }
+
+        modbusSlaveMemory.setHoldingRegisters(address, values);
+        service.sendResponse(new WriteMultipleRegistersResponse(address, values.length));
         ReferenceCountUtil.release(request);
     }
 
